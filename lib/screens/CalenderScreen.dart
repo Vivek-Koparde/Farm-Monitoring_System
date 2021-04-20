@@ -28,11 +28,6 @@ class _CalenderState extends State<Calender> {
   bool showSpinner = false;
   List<Task> tasks=[];
 
-  // var now = new DateTime.now();
-  // var formatter = new DateFormat('yyyy-MM-dd');
-  // String formattedDate;
-  // to get time
-
   @override
   void initState() {
     super.initState();
@@ -43,159 +38,91 @@ class _CalenderState extends State<Calender> {
     _selectedEvents = [];
     //prefsData();
   }
-  // prefsData() async {
-  //   prefs = await SharedPreferences.getInstance();
-  //   setState(() {
-  //     _events = Map<DateTime, List<dynamic>>.from(
-  //         decodeMap(json.decode(prefs.getString("events") ?? "{}")));
-  //   });
-  // }
 
-
-  // Map<String, dynamic> encodeMap(Map<DateTime, dynamic> map) {
-  //   Map<String, dynamic> newMap = {};
-  //   map.forEach((key, value) {
-  //     newMap[key.toString()] = map[key];
-  //   });
-  //   print(newMap);
-  //   return newMap;
-  // }
-  //
-  // Map<DateTime, dynamic> decodeMap(Map<String, dynamic> map) {
-  //   Map<DateTime, dynamic> newMap = {};
-  //   map.forEach((key, value) {
-  //     newMap[DateTime.parse(key)] = map[key];
-  //   });
-  //   print(newMap);
-  //   return newMap;
-  // }
   TextStyle dayStyle(FontWeight fontWeight, Color color) {
     return TextStyle(color: color, fontWeight: fontWeight);
   }
-  // Container taskList(
-  //     String task, String description, IconData img, Color color) {
-  //   return Container(
-  //     padding: EdgeInsets.only(top: 20),
-  //     child: Row(
-  //       children: [
-  //         Icon(
-  //           img,
-  //           color: color,
-  //           size: 20,
-  //         ),
-  //         Container(
-  //           padding: EdgeInsets.only(left: 10, right: 10),
-  //           width: MediaQuery.of(context).size.width * 0.8,
-  //           child: Column(
-  //             crossAxisAlignment: CrossAxisAlignment.start,
-  //             children: [
-  //               Text(
-  //                 task,
-  //                 style: TextStyle(
-  //                     color: Colors.white,
-  //                     fontWeight: FontWeight.bold,
-  //                     fontSize: 18),
-  //               ),
-  //               SizedBox(
-  //                 height: 5.0,
-  //               ),
-  //               Text(
-  //                 description,
-  //                 style: TextStyle(
-  //                     fontWeight: FontWeight.normal,
-  //                     fontSize: 15.0,
-  //                     color: Colors.white),
-  //               )
-  //             ],
-  //           ),
-  //         )
-  //       ],
-  //     ),
-  //   );
-  // }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomPadding: false,
-      body: SingleChildScrollView(
-        child: Container(
-          padding: EdgeInsets.all(10.0),
-          margin: EdgeInsets.only(bottom: 20),
-          child: Column(
-            children: <Widget>[
-              SizedBox(height: 30.0),
-              TableCalendar(
-                events: _events,
-                startingDayOfWeek: StartingDayOfWeek.monday,
-                calendarController: _controller,
-                calendarStyle: CalendarStyle(
-                  weekdayStyle: dayStyle(FontWeight.normal, Colors.black),
-                  weekendStyle: dayStyle(FontWeight.normal, Colors.red),
-                ),
-                initialCalendarFormat: CalendarFormat.week,
-                daysOfWeekStyle: DaysOfWeekStyle(
-                    weekdayStyle: TextStyle(
-                        color: Color(0xff0F1233),
-                        fontWeight: FontWeight.bold,
-                        fontSize: 15.0),
-                    weekendStyle: TextStyle(
-                        color: Colors.red,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 15.0)),
-                headerStyle: HeaderStyle(
-                  formatButtonVisible: false,
-                  titleTextStyle: TextStyle(
+      body: Container(
+        padding: EdgeInsets.all(10.0),
+        margin: EdgeInsets.only(bottom: 20),
+        child: Column(
+          children: <Widget>[
+            SizedBox(height: 30.0),
+            TableCalendar(
+              events: _events,
+              startingDayOfWeek: StartingDayOfWeek.monday,
+              calendarController: _controller,
+              calendarStyle: CalendarStyle(
+                weekdayStyle: dayStyle(FontWeight.normal, Colors.black),
+                weekendStyle: dayStyle(FontWeight.normal, Colors.red),
+              ),
+              initialCalendarFormat: CalendarFormat.week,
+              daysOfWeekStyle: DaysOfWeekStyle(
+                  weekdayStyle: TextStyle(
                       color: Color(0xff0F1233),
-                      fontSize: 15.0,
-                      fontWeight: FontWeight.bold),
-                  leftChevronIcon: Icon(
-                    Icons.chevron_left,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15.0),
+                  weekendStyle: TextStyle(
+                      color: Colors.red,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15.0)),
+              headerStyle: HeaderStyle(
+                formatButtonVisible: false,
+                titleTextStyle: TextStyle(
                     color: Color(0xff0F1233),
-                  ),
-                  rightChevronIcon: Icon(
-                    Icons.chevron_right,
-                    color: Color(0xff0F1233),
-                  ),
+                    fontSize: 15.0,
+                    fontWeight: FontWeight.bold),
+                leftChevronIcon: Icon(
+                  Icons.chevron_left,
+                  color: Color(0xff0F1233),
                 ),
-                availableGestures: AvailableGestures.none,
-                onDaySelected: (date, events, holidays) {
-                  setState(() {
-                    _selectedEvents = events;
-                    loadTasks();
-                  });
-                  flag=true;
-                  selectedDate=date;
-                },
-                builders: CalendarBuilders(
-                  selectedDayBuilder: (context, date, events) => Container(
-                      margin: const EdgeInsets.all(4.0),
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                          color: Theme.of(context).primaryColor,
-                          borderRadius: BorderRadius.circular(10.0)),
-                      child: Text(
-                        date.day.toString(),
-                        style: TextStyle(color: Colors.white),
-                      )),
-                  todayDayBuilder: (context, date, events) => Container(
-                      margin: const EdgeInsets.all(4.0),
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                          color: Colors.orange,
-                          borderRadius: BorderRadius.circular(10.0)),
-                      child: Text(
-                        date.day.toString(),
-                        style: TextStyle(color: Colors.white),
-                      )),
+                rightChevronIcon: Icon(
+                  Icons.chevron_right,
+                  color: Color(0xff0F1233),
                 ),
               ),
-              SizedBox(child: Container(color:Colors.black),),
-              Container(
-                child:flag?_buildListView(tasks):Text('task'),
+              availableGestures: AvailableGestures.none,
+              onDaySelected: (date, events, holidays) {
+                setState(() {
+                  _selectedEvents = events;
+                  loadTasks();
+                });
+                flag=true;
+                selectedDate=date;
+              },
+              builders: CalendarBuilders(
+                selectedDayBuilder: (context, date, events) => Container(
+                    margin: const EdgeInsets.all(4.0),
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                        color: Theme.of(context).primaryColor,
+                        borderRadius: BorderRadius.circular(10.0)),
+                    child: Text(
+                      date.day.toString(),
+                      style: TextStyle(color: Colors.white),
+                    )),
+                todayDayBuilder: (context, date, events) => Container(
+                    margin: const EdgeInsets.all(4.0),
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                        color: Colors.orange,
+                        borderRadius: BorderRadius.circular(10.0)),
+                    child: Text(
+                      date.day.toString(),
+                      style: TextStyle(color: Colors.white),
+                    )),
               ),
-            ],
-          ),
+            ),
+            SizedBox(child: Container(color:Colors.black),),
+            Expanded(
+              child:flag?_buildListView(tasks):Text('Tasks Loading...'),
+            ),
+          ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
@@ -269,23 +196,7 @@ class _CalenderState extends State<Calender> {
 
                 addTask(activity, description, date);
                 print(_events);
-                // setState(() {
-                //   if (_events[_controller.selectedDay] != null) {
-                //     _events[_controller.selectedDay]
-                //         .add(_eventController.text);
-                //     _activity[_controller.selectedDay].add(activityValue);
-                //   } else {
-                //     _events[_controller.selectedDay] = [
-                //       _eventController.text
-                //     ];
-                //     _activity[_controller.selectedDay]=[activityValue];
-                //   }
-                //   // formattedDate = formatter.format(now); to get date
-                //   prefs.setString(
-                //       "events", json.encode(encodeMap(_events)));
-                //   _eventController.clear();
-                //   Navigator.pop(context);
-                // });
+             
                 Navigator.pop(context);
               },
             )
