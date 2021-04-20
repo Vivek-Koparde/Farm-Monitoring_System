@@ -15,8 +15,16 @@ Future<List<Task>> getTasks() async{
       String taskDescription = x['taskDescription'].toString();
       DateTime date = DateTime.parse(x['date'].toString());
       Task task = new Task(taskName: taskName,taskDescription: taskDescription,date: date);
+      task.id=x['_id'];
+      print(task.id);
       arr.add(task);
     }
   }
   return arr;
+}
+
+Future<bool> deleteTask(String id) async{
+  http.Response response = await http.delete('https://infinite-fjord-59639.herokuapp.com/tasks/'+id);
+  print(response.body);
+  return true;
 }

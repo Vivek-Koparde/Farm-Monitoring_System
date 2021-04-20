@@ -375,6 +375,14 @@ class _CalenderState extends State<Calender> {
                                   Icon(Icons.access_time,color: Colors.white,),
                                   SizedBox(width: 10.0,),
                                   Text(displayDate,style: TextStyle(color:Colors.white),),
+                                  SizedBox(width: 10.0,),
+                                  IconButton(
+                                      icon:Icon(Icons.delete_rounded,color: Colors.red,),
+                                      onPressed: (){
+                                          //TODO: Delete task
+                                        deleteTaskLocal(taskPrint[index].id);
+                                      }
+                                  )
                                 ],
                               )
                             ],
@@ -404,6 +412,16 @@ class _CalenderState extends State<Calender> {
     });
     print(tasks);
   }
+
+  deleteTaskLocal(String id) async{
+    bool isDeleted = await deleteTask(id);
+    print(isDeleted);
+    if (isDeleted){
+      loadTasks();
+    }
+  }
+
+
 
   Future<bool> addTask(
       String activity, String description, DateTime date) async {
