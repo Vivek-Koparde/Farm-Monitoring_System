@@ -1,8 +1,12 @@
 import 'dart:convert';
-
 import 'package:farm_monitoring_flutter/models/Task.dart';
 import 'package:http/http.dart' as http;
 
+Future<bool> deleteTask(String id) async{
+  http.Response response = await http.delete('https://infinite-fjord-59639.herokuapp.com/tasks/'+id);
+  print(response.body);
+  return true;
+}
 
 Future<List<Task>> getTasks() async{
   List<Task> arr = [];
@@ -23,8 +27,3 @@ Future<List<Task>> getTasks() async{
   return arr;
 }
 
-Future<bool> deleteTask(String id) async{
-  http.Response response = await http.delete('https://infinite-fjord-59639.herokuapp.com/tasks/'+id);
-  print(response.body);
-  return true;
-}

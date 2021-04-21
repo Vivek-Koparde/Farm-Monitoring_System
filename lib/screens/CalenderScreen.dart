@@ -1,9 +1,9 @@
 import 'dart:convert';
 import 'package:farm_monitoring_flutter/api/get_tasks.dart';
 import 'package:farm_monitoring_flutter/models/Task.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:http/http.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -29,11 +29,6 @@ class _CalenderState extends State<Calender> {
   bool showSpinner = false;
   List<Task> tasks = [];
 
-  // var now = new DateTime.now();
-  // var formatter = new DateFormat('yyyy-MM-dd');
-  // String formattedDate;
-  // to get time
-
   @override
   void initState() {
     super.initState();
@@ -42,77 +37,11 @@ class _CalenderState extends State<Calender> {
     _events = {};
     _activity = {};
     _selectedEvents = [];
-    //prefsData();
   }
-  // prefsData() async {
-  //   prefs = await SharedPreferences.getInstance();
-  //   setState(() {
-  //     _events = Map<DateTime, List<dynamic>>.from(
-  //         decodeMap(json.decode(prefs.getString("events") ?? "{}")));
-  //   });
-  // }
 
-  // Map<String, dynamic> encodeMap(Map<DateTime, dynamic> map) {
-  //   Map<String, dynamic> newMap = {};
-  //   map.forEach((key, value) {
-  //     newMap[key.toString()] = map[key];
-  //   });
-  //   print(newMap);
-  //   return newMap;
-  // }
-  //
-  // Map<DateTime, dynamic> decodeMap(Map<String, dynamic> map) {
-  //   Map<DateTime, dynamic> newMap = {};
-  //   map.forEach((key, value) {
-  //     newMap[DateTime.parse(key)] = map[key];
-  //   });
-  //   print(newMap);
-  //   return newMap;
-  // }
   TextStyle dayStyle(FontWeight fontWeight, Color color) {
     return TextStyle(color: color, fontWeight: fontWeight);
   }
-  // Container taskList(
-  //     String task, String description, IconData img, Color color) {
-  //   return Container(
-  //     padding: EdgeInsets.only(top: 20),
-  //     child: Row(
-  //       children: [
-  //         Icon(
-  //           img,
-  //           color: color,
-  //           size: 20,
-  //         ),
-  //         Container(
-  //           padding: EdgeInsets.only(left: 10, right: 10),
-  //           width: MediaQuery.of(context).size.width * 0.8,
-  //           child: Column(
-  //             crossAxisAlignment: CrossAxisAlignment.start,
-  //             children: [
-  //               Text(
-  //                 task,
-  //                 style: TextStyle(
-  //                     color: Colors.white,
-  //                     fontWeight: FontWeight.bold,
-  //                     fontSize: 18),
-  //               ),
-  //               SizedBox(
-  //                 height: 5.0,
-  //               ),
-  //               Text(
-  //                 description,
-  //                 style: TextStyle(
-  //                     fontWeight: FontWeight.normal,
-  //                     fontSize: 15.0,
-  //                     color: Colors.white),
-  //               )
-  //             ],
-  //           ),
-  //         )
-  //       ],
-  //     ),
-  //   );
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -194,7 +123,18 @@ class _CalenderState extends State<Calender> {
                 child: Container(color: Colors.black),
               ),
               Container(
-                child: flag ? _buildListView(tasks) : Text('task'),
+                child: flag
+                    ? _buildListView(tasks)
+                    : Column(
+                      children: [
+                        SizedBox(height: MediaQuery.of(context).size.height/6,),
+                        Image.asset(
+                            "images/gif/giphy.gif",
+                            height: 250.0,
+                            width: MediaQuery.of(context).size.width,
+                          ),
+                      ],
+                    ),
               ),
             ],
           ),
@@ -277,36 +217,24 @@ class _CalenderState extends State<Calender> {
                     style: TextStyle(
                         color: Colors.red, fontWeight: FontWeight.bold),
                   ),
-                  onPressed: () {
-                    setState(() {
-                      showSpinner = true;
-                    });
-                    if (_eventController.text.isEmpty) return;
-
-                    String activity = activityValue;
-                    String description = _eventController.text;
-                    DateTime date = _controller.selectedDay;
-
-                    addTask(activity, description, date);
-                    print(_events);
-                    // setState(() {
-                    //   if (_events[_controller.selectedDay] != null) {
-                    //     _events[_controller.selectedDay]
-                    //         .add(_eventController.text);
-                    //     _activity[_controller.selectedDay].add(activityValue);
-                    //   } else {
-                    //     _events[_controller.selectedDay] = [
-                    //       _eventController.text
-                    //     ];
-                    //     _activity[_controller.selectedDay]=[activityValue];
-                    //   }
-                    //   // formattedDate = formatter.format(now); to get date
-                    //   prefs.setString(
-                    //       "events", json.encode(encodeMap(_events)));
-                    //   _eventController.clear();
-                    //   Navigator.pop(context);
-                    // });
-                    Navigator.pop(context);
+                  onPressed: () async {
+                    showDialog(
+                        context: context,
+                        barrierDismissible: false,
+                        builder: (BuildContext context) {
+                          return Center(
+                            child: SpinKitWave(color: Colors.red),
+                          );
+                        });
+                    try {
+                      if (_eventController.text.isEmpty) return;
+                      String activity = activityValue;
+                      String description = _eventController.text;
+                      DateTime date = _controller.selectedDay;
+                      await addTask(activity, description, date);
+                    } catch (Exception) {} finally {
+                      Navigator.of(context).pop();
+                    }
                   },
                 )
               ],
@@ -320,6 +248,7 @@ class _CalenderState extends State<Calender> {
         taskPrint.add(task);
       }
     }
+
     return SingleChildScrollView(
       physics: ScrollPhysics(),
       child: ListView.builder(
@@ -328,14 +257,16 @@ class _CalenderState extends State<Calender> {
         shrinkWrap: true,
         itemCount: taskPrint.length,
         itemBuilder: (context, index) {
-          String displayDate=taskPrint[index].date.day.toString()+"-"+taskPrint[index].date.month.toString()+"-"+taskPrint[index].date.year.toString();
-          String imgName=taskPrint[index].taskName.toLowerCase()+'.png';
-          if(imgName=='spray pest and disease.png')
-            {
-              imgName="spary_pest.png";
-            }
-          else if(imgName=="farm practice.png"){
-            imgName="farm_practice.png";
+          String displayDate = taskPrint[index].date.day.toString() +
+              "-" +
+              taskPrint[index].date.month.toString() +
+              "-" +
+              taskPrint[index].date.year.toString();
+          String imgName = taskPrint[index].taskName.toLowerCase() + '.png';
+          if (imgName == 'spray pest and disease.png') {
+            imgName = "spary_pest.png";
+          } else if (imgName == "farm practice.png") {
+            imgName = "farm_practice.png";
           }
           return Column(
             children: [
@@ -372,24 +303,78 @@ class _CalenderState extends State<Calender> {
                               ),
                               Row(
                                 children: [
-                                  Icon(Icons.access_time,color: Colors.white,),
-                                  SizedBox(width: 10.0,),
-                                  Text(displayDate,style: TextStyle(color:Colors.white),),
-                                  SizedBox(width: 10.0,),
-                                  IconButton(
-                                      icon:Icon(Icons.delete_rounded,color: Colors.red,),
-                                      onPressed: (){
-                                          //TODO: Delete task
-                                        deleteTaskLocal(taskPrint[index].id);
-                                      }
-                                  )
+                                  Icon(
+                                    Icons.access_time,
+                                    color: Colors.white,
+                                  ),
+                                  SizedBox(
+                                    width: 10.0,
+                                  ),
+                                  Text(
+                                    displayDate,
+                                    style: TextStyle(color: Colors.white),
+                                  ),
                                 ],
                               )
                             ],
                           ),
                         ),
-                        SizedBox(width: 50.0),
-                        Image.asset("images/$imgName",height: 50.0,width: 50.0,colorBlendMode: BlendMode.darken,),
+                        SizedBox(
+                          width: 50.0,
+                        ),
+                        Column(
+                          children: [
+                            Image.asset(
+                              "images/$imgName",
+                              height: 50.0,
+                              width: 50.0,
+                              colorBlendMode: BlendMode.darken,
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(bottom: 20.0),
+                            ),
+                            IconButton(
+                              icon: Icon(
+                                Icons.delete_rounded,
+                                color: Colors.white,
+                              ),
+                              onPressed: () async {
+                                showDialog(
+                                  context: context,
+                                  barrierDismissible: false,
+                                  builder: (BuildContext context) {
+                                    return Center(
+                                      child: SpinKitDoubleBounce(itemBuilder:
+                                          (BuildContext context, int index) {
+                                        return DecoratedBox(
+                                          decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            color: index.isEven
+                                                ? Colors.white
+                                                : Color(0xff00A961),
+                                          ),
+                                        );
+                                      }),
+                                    );
+                                  },
+                                );
+                                try {
+                                  await deleteTaskLocal(taskPrint[index].id);
+                                } catch (Exception) {
+                                  //Exception handle
+                                } finally {
+                                  Future.delayed(
+                                      const Duration(milliseconds: 1000), () {
+                                    setState(() {
+                                      Navigator.pop(context);
+                                    });
+                                  });
+                                }
+                              },
+                              alignment: Alignment.bottomRight,
+                            ),
+                          ],
+                        ),
                       ],
                     ),
                   ),
@@ -413,15 +398,13 @@ class _CalenderState extends State<Calender> {
     print(tasks);
   }
 
-  deleteTaskLocal(String id) async{
+  deleteTaskLocal(String id) async {
     bool isDeleted = await deleteTask(id);
     print(isDeleted);
-    if (isDeleted){
+    if (isDeleted) {
       loadTasks();
     }
   }
-
-
 
   Future<bool> addTask(
       String activity, String description, DateTime date) async {

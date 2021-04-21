@@ -66,6 +66,7 @@ flutter:
   assets:
     - images/
     - images/bottomnavigation/
+    - images/gif/
 
   fonts:
     - family: Poppins
