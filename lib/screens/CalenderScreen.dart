@@ -24,7 +24,7 @@ class _CalenderState extends State<Calender> {
   DateTime selectedDate;
   TextEditingController _eventController;
   SharedPreferences prefs;
-  bool flag = false;
+  static bool flag = false;
   String activityValue = "Irrigation";
   bool showSpinner = false;
   List<Task> tasks = [];
@@ -89,12 +89,12 @@ class _CalenderState extends State<Calender> {
                 ),
                 availableGestures: AvailableGestures.none,
                 onDaySelected: (date, events, holidays) {
-                  setState(() {
+                  setState(()  {
                     _selectedEvents = events;
                     loadTasks();
+                    flag = true;
+                    selectedDate = date;
                   });
-                  flag = true;
-                  selectedDate = date;
                 },
                 builders: CalendarBuilders(
                   selectedDayBuilder: (context, date, events) => Container(
@@ -126,15 +126,17 @@ class _CalenderState extends State<Calender> {
                 child: flag
                     ? _buildListView(tasks)
                     : Column(
-                      children: [
-                        SizedBox(height: MediaQuery.of(context).size.height/6,),
-                        Image.asset(
+                        children: [
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height / 6,
+                          ),
+                          Image.asset(
                             "images/gif/giphy.gif",
                             height: 250.0,
                             width: MediaQuery.of(context).size.width,
                           ),
-                      ],
-                    ),
+                        ],
+                      ),
               ),
             ],
           ),
@@ -223,7 +225,19 @@ class _CalenderState extends State<Calender> {
                         barrierDismissible: false,
                         builder: (BuildContext context) {
                           return Center(
-                            child: SpinKitWave(color: Colors.red),
+                            child: SpinKitDoubleBounce(
+                                itemBuilder:
+                                    (BuildContext context,
+                                    int index) {
+                                  return DecoratedBox(
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: index.isEven
+                                          ? Colors.white
+                                          : Color(0xff00A961),
+                                    ),
+                                  );
+                                }),
                           );
                         });
                     try {
@@ -232,24 +246,35 @@ class _CalenderState extends State<Calender> {
                       String description = _eventController.text;
                       DateTime date = _controller.selectedDay;
                       await addTask(activity, description, date);
-                    } catch (Exception) {} finally {
-                      Navigator.of(context).pop();
-                    }
+                      Navigator.pop(context);
+                      _eventController.clear();
+                    } catch (Exception) {}
                   },
                 )
               ],
             ));
   }
 
-  _buildListView(List<Task> tasks) {
+  _buildListView(List<Task> tasks)  {
     List<Task> taskPrint = [];
     for (var task in tasks) {
       if (selectedDate == task.date) {
         taskPrint.add(task);
       }
     }
-
-    return SingleChildScrollView(
+    return taskPrint.length == 0
+        ? Column(
+        children:[
+          SizedBox(height: MediaQuery.of(context).size.height/4,),
+          Text(
+            'NO TASK AVAILABLE',
+            style: TextStyle(
+                fontSize: 25.0,
+                fontWeight: FontWeight.bold,
+                color: Color(0xff00A961)),
+          )
+        ])
+        : SingleChildScrollView(
       physics: ScrollPhysics(),
       child: ListView.builder(
         physics: NeverScrollableScrollPhysics(),
@@ -262,7 +287,8 @@ class _CalenderState extends State<Calender> {
               taskPrint[index].date.month.toString() +
               "-" +
               taskPrint[index].date.year.toString();
-          String imgName = taskPrint[index].taskName.toLowerCase() + '.png';
+          String imgName =
+              taskPrint[index].taskName.toLowerCase() + '.png';
           if (imgName == 'spray pest and disease.png') {
             imgName = "spary_pest.png";
           } else if (imgName == "farm practice.png") {
@@ -277,7 +303,8 @@ class _CalenderState extends State<Calender> {
                 child: ListTile(
                   contentPadding: EdgeInsets.all(20.0),
                   title: Text('Task',
-                      style: TextStyle(color: Colors.white, fontSize: 15.0)),
+                      style:
+                      TextStyle(color: Colors.white, fontSize: 15.0)),
                   subtitle: Container(
                     child: Row(
                       children: [
@@ -295,7 +322,9 @@ class _CalenderState extends State<Calender> {
                               ),
                               Text(
                                 'Resources Used: ' +
-                                    taskPrint[index].taskDescription.toString(),
+                                    taskPrint[index]
+                                        .taskDescription
+                                        .toString(),
                                 style: TextStyle(color: Colors.white),
                               ),
                               SizedBox(
@@ -344,31 +373,35 @@ class _CalenderState extends State<Calender> {
                                   barrierDismissible: false,
                                   builder: (BuildContext context) {
                                     return Center(
-                                      child: SpinKitDoubleBounce(itemBuilder:
-                                          (BuildContext context, int index) {
-                                        return DecoratedBox(
-                                          decoration: BoxDecoration(
-                                            shape: BoxShape.circle,
-                                            color: index.isEven
-                                                ? Colors.white
-                                                : Color(0xff00A961),
-                                          ),
-                                        );
-                                      }),
+                                      child: SpinKitDoubleBounce(
+                                          itemBuilder:
+                                              (BuildContext context,
+                                              int index) {
+                                            return DecoratedBox(
+                                              decoration: BoxDecoration(
+                                                shape: BoxShape.circle,
+                                                color: index.isEven
+                                                    ? Colors.white
+                                                    : Color(0xff00A961),
+                                              ),
+                                            );
+                                          }),
                                     );
                                   },
                                 );
                                 try {
-                                  await deleteTaskLocal(taskPrint[index].id);
+                                  await deleteTaskLocal(
+                                      taskPrint[index].id);
                                 } catch (Exception) {
                                   //Exception handle
                                 } finally {
                                   Future.delayed(
-                                      const Duration(milliseconds: 1000), () {
-                                    setState(() {
-                                      Navigator.pop(context);
-                                    });
-                                  });
+                                      const Duration(milliseconds: 1000),
+                                          () {
+                                        setState(() {
+                                          Navigator.pop(context);
+                                        });
+                                      });
                                 }
                               },
                               alignment: Alignment.bottomRight,
@@ -391,10 +424,35 @@ class _CalenderState extends State<Calender> {
   }
 
   loadTasks() async {
-    List<Task> arr = await getTasks();
-    setState(() {
-      tasks = arr;
-    });
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return Center(
+          child: SpinKitDoubleBounce(
+              itemBuilder:
+                  (BuildContext context,
+                  int index) {
+                return DecoratedBox(
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: index.isEven
+                        ? Colors.white
+                        : Color(0xff00A961),
+                  ),
+                );
+              }),
+        );
+      },
+    );
+    try {
+      List<Task> arr = await getTasks();
+      setState(() {
+        tasks = arr;
+      });
+    }
+    catch(Exception){}
+    finally{Navigator.pop(context);}
     print(tasks);
   }
 
