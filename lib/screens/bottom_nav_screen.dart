@@ -48,9 +48,7 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
 
   @override
   Widget build(BuildContext context) {
-
      listOfScreens = [
-
       GraphScreen(),
       Calender(),
       DiseaseScreen(),

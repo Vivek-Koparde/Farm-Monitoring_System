@@ -14,9 +14,11 @@ class Calender extends StatefulWidget {
   static String id = "calender";
   @override
   _CalenderState createState() => _CalenderState();
+
 }
 
 class _CalenderState extends State<Calender> {
+
   CalendarController _controller;
   Map<DateTime, List<dynamic>> _events;
   Map<DateTime, List<dynamic>> _activity;
@@ -24,7 +26,6 @@ class _CalenderState extends State<Calender> {
   DateTime selectedDate;
   TextEditingController _eventController;
   SharedPreferences prefs;
-  static bool flag = false;
   String activityValue = "Irrigation";
   bool showSpinner = false;
   List<Task> tasks = [];
@@ -37,6 +38,7 @@ class _CalenderState extends State<Calender> {
     _events = {};
     _activity = {};
     _selectedEvents = [];
+    loadTasks();
   }
 
   TextStyle dayStyle(FontWeight fontWeight, Color color) {
@@ -91,9 +93,6 @@ class _CalenderState extends State<Calender> {
                 onDaySelected: (date, events, holidays) {
                   setState(()  {
                     _selectedEvents = events;
-                    loadTasks();
-                    flag = true;
-                    selectedDate = date;
                   });
                 },
                 builders: CalendarBuilders(
@@ -102,7 +101,8 @@ class _CalenderState extends State<Calender> {
                       alignment: Alignment.center,
                       decoration: BoxDecoration(
                           color: Theme.of(context).primaryColor,
-                          borderRadius: BorderRadius.circular(10.0)),
+                          borderRadius: BorderRadius.circular(10.0)
+                      ),
                       child: Text(
                         date.day.toString(),
                         style: TextStyle(color: Colors.white),
@@ -116,27 +116,14 @@ class _CalenderState extends State<Calender> {
                       child: Text(
                         date.day.toString(),
                         style: TextStyle(color: Colors.white),
-                      )),
+                      ),),
                 ),
               ),
               SizedBox(
                 child: Container(color: Colors.black),
               ),
               Container(
-                child: flag
-                    ? _buildListView(tasks)
-                    : Column(
-                        children: [
-                          SizedBox(
-                            height: MediaQuery.of(context).size.height / 6,
-                          ),
-                          Image.asset(
-                            "images/gif/giphy.gif",
-                            height: 250.0,
-                            width: MediaQuery.of(context).size.width,
-                          ),
-                        ],
-                      ),
+                child: _buildListView(tasks,_controller.selectedDay)
               ),
             ],
           ),
@@ -249,32 +236,22 @@ class _CalenderState extends State<Calender> {
                       Navigator.pop(context);
                       _eventController.clear();
                     } catch (Exception) {}
+                    finally{Navigator.pop(context);}
                   },
                 )
               ],
             ));
   }
 
-  _buildListView(List<Task> tasks)  {
+  _buildListView(List<Task> tasks,DateTime date)  {
+    selectedDate=date;
     List<Task> taskPrint = [];
     for (var task in tasks) {
       if (selectedDate == task.date) {
         taskPrint.add(task);
       }
     }
-    return taskPrint.length == 0
-        ? Column(
-        children:[
-          SizedBox(height: MediaQuery.of(context).size.height/4,),
-          Text(
-            'NO TASK AVAILABLE',
-            style: TextStyle(
-                fontSize: 25.0,
-                fontWeight: FontWeight.bold,
-                color: Color(0xff00A961)),
-          )
-        ])
-        : SingleChildScrollView(
+    return SingleChildScrollView(
       physics: ScrollPhysics(),
       child: ListView.builder(
         physics: NeverScrollableScrollPhysics(),
@@ -421,38 +398,14 @@ class _CalenderState extends State<Calender> {
         },
       ),
     );
+
   }
 
   loadTasks() async {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return Center(
-          child: SpinKitDoubleBounce(
-              itemBuilder:
-                  (BuildContext context,
-                  int index) {
-                return DecoratedBox(
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: index.isEven
-                        ? Colors.white
-                        : Color(0xff00A961),
-                  ),
-                );
-              }),
-        );
-      },
-    );
-    try {
-      List<Task> arr = await getTasks();
-      setState(() {
-        tasks = arr;
-      });
-    }
-    catch(Exception){}
-    finally{Navigator.pop(context);}
+    List<Task> arr = await getTasks();
+    setState(() {
+      tasks = arr;
+    });
     print(tasks);
   }
 
