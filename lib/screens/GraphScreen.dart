@@ -1,10 +1,10 @@
 import 'package:farm_monitoring_flutter/api/get_light_intensity.dart';
 import 'package:farm_monitoring_flutter/api/get_temperature.dart';
-import 'package:farm_monitoring_flutter/home_screen.dart';
-import 'package:farm_monitoring_flutter/widgets/CustomLineGraph.dart';
 import 'package:farm_monitoring_flutter/api/get_moisture.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:farm_monitoring_flutter/widgets/CustomeTimeGraph.dart';
+import 'package:lottie/lottie.dart';
+
 
 import 'package:flutter/material.dart';
 
@@ -31,7 +31,13 @@ class _GraphScreenState extends State<GraphScreen> {
               //print(snapshot.data);
               if(snapshot.data==null){
                 return Container(
-                  child: Center(child: Text('Loading.....')),
+                  child: Center(child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text("Loading..."),
+                      Lottie.asset('images/tractor_animation.json')
+                    ],
+                  )),
                 );
               }else{
 

@@ -2,7 +2,6 @@ import 'package:farm_monitoring_flutter/api/get_data.dart';
 import 'package:farm_monitoring_flutter/widgets/CustomLineGraph.dart';
 import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
-import 'package:farm_monitoring_flutter/widgets/custom_badge.dart';
 
 
 class HomeScreen extends StatefulWidget {

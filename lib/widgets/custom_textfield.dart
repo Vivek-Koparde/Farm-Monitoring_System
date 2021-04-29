@@ -5,7 +5,7 @@ class CustomTextField extends StatelessWidget {
   final bool isPassword;
   final int textColor;
   final int lablelColor;
-  Function changeValue;
+  final Function changeValue;
   CustomTextField({this.label,this.isPassword,this.textColor,this.lablelColor,this.changeValue});
 
   @override

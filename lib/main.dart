@@ -1,6 +1,5 @@
 import 'package:farm_monitoring_flutter/api/get_data.dart';
 import 'package:farm_monitoring_flutter/home_screen.dart';
-import 'package:farm_monitoring_flutter/screens/DiseaseScreen.dart';
 import 'package:farm_monitoring_flutter/screens/bottom_nav_screen.dart';
 import 'package:farm_monitoring_flutter/screens/login.dart';
 import 'package:farm_monitoring_flutter/screens/sign_up.dart';
@@ -10,9 +9,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
+
 
 
 void main() async{

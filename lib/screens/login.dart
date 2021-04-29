@@ -1,6 +1,4 @@
 import 'package:cool_alert/cool_alert.dart';
-import 'package:farm_monitoring_flutter/api/get_data.dart';
-import 'package:farm_monitoring_flutter/home_screen.dart';
 import 'package:farm_monitoring_flutter/screens/bottom_nav_screen.dart';
 import 'package:farm_monitoring_flutter/screens/sign_up.dart';
 import 'package:flutter/material.dart';
