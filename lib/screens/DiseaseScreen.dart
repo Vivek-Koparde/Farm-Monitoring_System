@@ -25,46 +25,75 @@ class DiseaseScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Center(
-        child: ListView.builder(
-            itemCount: name.length,
-            itemBuilder: (BuildContext context, int index) {
-              return Container(
-                padding: EdgeInsets.only(top: 10, left: 10, right: 10),
-                width: double.infinity,
-                child: Card(
-
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Image.network(
-                        img[index],
-                        height: 250,
-                        width: double.infinity,
-                        fit: BoxFit.fill,
-                      ),
-                      Container(
-                        padding: EdgeInsets.all(20),
+    return Scaffold(
+      body: SafeArea(
+        child: Container(
+          child: Center(
+            child: ListView.builder(
+                itemCount: name.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return Container(
+                    padding: EdgeInsets.only(top: 10, left: 10, right: 10),
+                    width: double.infinity,
+                    child: Card(
+                      color: Color(0xff00A961),
+                      child: Padding(
+                        padding: const EdgeInsets.all(10.0),
                         child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            Text(
-                              name[index],
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
+                            Image.network(
+                              img[index],
+                              height: 200,
+                              width: 300,
+                              fit: BoxFit.cover,
+                            ),
+                            //SizedBox(height: 10.0,child: Container(color: Colors.white,),),
+                            Container(
+                              padding: EdgeInsets.all(20),
+                              child: Column(
+                                children: [
+                                  Text(
+                                    name[index],
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  Text(info[index],style: TextStyle(color: Colors.white),),
+                                ],
                               ),
                             ),
-                            Text(info[index]),
+                            Container(
+                              padding: EdgeInsets.only(left: 20.0,top: 10.0,bottom: 10.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text('Probablity',style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold)),
+                                  Row(
+                                    children: [
+                                      Image.asset('images/temperature-high.png',color: Colors.white,width: 20.0,height: 20.0,),
+                                      Text('High :',style: TextStyle(color: Colors.white),),
+
+                                  ],),
+                                  Row(
+                                    children: [
+                                      Image.asset('images/temperature-low.png',color: Colors.white,width: 20.0,height: 20.0,),
+                                      Text('Low :',style: TextStyle(color: Colors.white),),
+
+                                    ],),
+                                ],
+                              ),
+                            )
                           ],
                         ),
-                      )
-                      
-                    ],
-                  ),
-                ),
-              );
-            }),
+                      ),
+                    ),
+                  );
+                }),
+          ),
+        ),
       ),
     );
   }
