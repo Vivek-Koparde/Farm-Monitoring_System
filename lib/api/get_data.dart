@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+
+
 Future<DataFormat> getData (BuildContext context) async{
   print('method Called');
   //http.Response response = await http.get('https://api.thingspeak.com/channels/1288997/fields/2.json?api_key=GG8YZU6QEOKRPEHM&results');
@@ -29,24 +31,7 @@ Future<DataFormat> getData (BuildContext context) async{
         arrMoisture.add(double.parse(x['field3']).toInt());
       }
     }
-    // for (var x in arr){
-    //   print('data : $x');
-    // }
-    // Navigator.push(context,MaterialPageRoute(builder: (context){
-    //   // return HomeScreen(
-    //   //     dataLightIntensity: arrLightIntensity,
-    //   //     dataTemperature: arrTemperature,
-    //   //     dataMoisture: arrMoisture,
-    //   // );
-    //
-    //   // return BottomNavigationScreen(
-    //   //   dataLightIntensity: arrLightIntensity,
-    //   //   dataTemperature: arrTemperature,
-    //   //   dataMoisture: arrMoisture,
-    //   // );
-    //
-    //   return
-    // }));
+
     return DataFormat(
       dataLightIntensity: arrLightIntensity,
       dataTemperature: arrTemperature,

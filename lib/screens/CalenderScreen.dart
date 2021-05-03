@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:farm_monitoring_flutter/api/get_tasks.dart';
 import 'package:farm_monitoring_flutter/models/Task.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:http/http.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
@@ -420,7 +421,7 @@ class _CalenderState extends State<Calender> {
 
   Future<bool> addTask(
       String activity, String description, DateTime date) async {
-    String url = 'https://infinite-fjord-59639.herokuapp.com/tasks';
+    String url = 'https://infinite-fjord-59639.herokuapp.com/tasks/'+FirebaseAuth.instance.currentUser.uid;
     Map<String, String> headers = {"Content-type": "application/json"};
 
     Response response = await post(url,

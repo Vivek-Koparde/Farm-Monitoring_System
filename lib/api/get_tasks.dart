@@ -1,16 +1,22 @@
 import 'dart:convert';
 import 'package:farm_monitoring_flutter/models/Task.dart';
 import 'package:http/http.dart' as http;
+import 'package:firebase_auth/firebase_auth.dart';
+
+final _auth = FirebaseAuth.instance;
+String uid = _auth.currentUser.uid;
+String baseURL = 'https://infinite-fjord-59639.herokuapp.com/tasks/';
+
 
 Future<bool> deleteTask(String id) async{
-  http.Response response = await http.delete('https://infinite-fjord-59639.herokuapp.com/tasks/'+id);
+  http.Response response = await http.delete(baseURL+id);
   print(response.body);
   return true;
 }
 
 Future<List<Task>> getTasks() async{
   List<Task> arr = [];
-  http.Response response = await http.get('https://infinite-fjord-59639.herokuapp.com/tasks');
+  http.Response response = await http.get(baseURL+uid);
   if (response.statusCode == 200){
     var data = jsonDecode(response.body);
     //print(data);

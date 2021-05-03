@@ -9,87 +9,117 @@ import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
 
-
 class GraphScreen extends StatefulWidget {
   @override
   _GraphScreenState createState() => _GraphScreenState();
 }
 
 class _GraphScreenState extends State<GraphScreen> {
-  double moistureSpeedoMeterValue=150.0;
+  double moistureSpeedoMeterValue = 150.0;
   double temperatureSpeedoMeterValue;
   double lighIntensitySpeedoMeterValue;
   var timeMoisture = 1;
   var timeTemperature = 1;
   var timeLightIntensity = 1;
+
+
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       body: SafeArea(
-        child: Container(
-          child: Column(
-            children: [
-              SfRadialGauge(
-                backgroundColor: Color(0xff00A961),
-                axes: <RadialAxis>[
-                  RadialAxis(
-                      minimum: 0,
-                      maximum: 200,
-                      labelOffset: 30,
-                      ranges: <GaugeRange>[
-                        GaugeRange(
-                            startValue: 0,
-                            endValue: 200,
-                            sizeUnit: GaugeSizeUnit.factor,
-                            startWidth: 0.03,
-                            endWidth: 0.03,
-                            gradient: SweepGradient(colors: const <Color>[
-                              Colors.green,
-                              Colors.yellow,
-                              Colors.red
-                            ], stops: const <double>[
-                              0.0,
-                              0.5,
-                              1
-                            ]))
-                      ],
-                      pointers: <GaugePointer>[
-                        NeedlePointer(
-                            value: moistureSpeedoMeterValue,
-                            needleLength: 0.95,
-                            enableAnimation: true,
-                            animationType: AnimationType.ease,
-                            needleStartWidth: 1.5,
-                            needleEndWidth: 6,
-                            needleColor: Colors.red,
-                            knobStyle: KnobStyle(knobRadius: 0.09))
-                      ],
-                      annotations: <GaugeAnnotation>[
-                        GaugeAnnotation(widget: Container(child:
-                        Column(
-                            children: <Widget>[
-                              SizedBox(height: 80.0,),
-                              Text('150.0', style: TextStyle(fontSize: 25,color: Colors.white)),
-                              SizedBox(height: 10),
-                              Text('Moisture', style: TextStyle(fontSize: 14,color: Colors.white))]
-                        )), angle: 90, positionFactor: 0.75)],
-                      axisLineStyle: AxisLineStyle(
-                          thicknessUnit: GaugeSizeUnit.factor, thickness: 0.03),
-                      majorTickStyle: MajorTickStyle(
-                          length: 6, thickness: 4, color: Colors.white),
-                      minorTickStyle: MinorTickStyle(
-                          length: 3, thickness: 3, color: Colors.white),
-                      axisLabelStyle: GaugeTextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 14))
-                ],
-              ),
+          child: Container(
+        child: Column(
+          children: [
+            FutureBuilder(
+                future: getTodaysData(),
+                builder: (BuildContext context, AsyncSnapshot snapshot) {
 
-            ],
-          ),
-        )
-      ),
+                  if (snapshot.data == null) {
+                    return Container(
+                      child: Center(
+                          child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text("Loading..."),
+                          Lottie.asset('images/tractor_animation.json')
+                        ],
+                      )),
+                    );
+                  } else {
+                    return Container(
+                      child: SfRadialGauge(
+                        backgroundColor: Color(0xff00A961),
+                        axes: <RadialAxis>[
+                          RadialAxis(
+                              minimum: 0,
+                              maximum: 200,
+                              labelOffset: 30,
+                              ranges: <GaugeRange>[
+                                GaugeRange(
+                                    startValue: 0,
+                                    endValue: 200,
+                                    sizeUnit: GaugeSizeUnit.factor,
+                                    startWidth: 0.03,
+                                    endWidth: 0.03,
+                                    gradient: SweepGradient(colors: const <Color>[
+                                      Colors.green,
+                                      Colors.yellow,
+                                      Colors.red
+                                    ], stops: const <double>[
+                                      0.0,
+                                      0.5,
+                                      1
+                                    ]))
+                              ],
+                              pointers: <GaugePointer>[
+                                NeedlePointer(
+                                    value: snapshot.data.avgMoisture,
+                                    needleLength: 0.95,
+                                    enableAnimation: true,
+                                    animationType: AnimationType.ease,
+                                    needleStartWidth: 1.5,
+                                    needleEndWidth: 6,
+                                    needleColor: Colors.red,
+                                    knobStyle: KnobStyle(knobRadius: 0.09))
+                              ],
+                              annotations: <GaugeAnnotation>[
+                                GaugeAnnotation(
+                                    widget: Container(
+                                        child: Column(children: <Widget>[
+                                          SizedBox(
+                                            height: 80.0,
+                                          ),
+                                          Text('150.0',
+                                              style: TextStyle(
+                                                  fontSize: 25, color: Colors.white)),
+                                          SizedBox(height: 10),
+                                          Text('Moisture',
+                                              style: TextStyle(
+                                                  fontSize: 14, color: Colors.white))
+                                        ])),
+                                    angle: 90,
+                                    positionFactor: 0.75)
+                              ],
+                              axisLineStyle: AxisLineStyle(
+                                  thicknessUnit: GaugeSizeUnit.factor, thickness: 0.03),
+                              majorTickStyle: MajorTickStyle(
+                                  length: 6, thickness: 4, color: Colors.white),
+                              minorTickStyle: MinorTickStyle(
+                                  length: 3, thickness: 3, color: Colors.white),
+                              axisLabelStyle: GaugeTextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 14))
+                        ],
+                      ),
+                    );
+                  }
+                }),
+
+          ],
+        ),
+      )),
       floatingActionButton: SpeedDial(
         marginEnd: 18,
         marginBottom: 20,
@@ -148,7 +178,7 @@ class _GraphScreenState extends State<GraphScreen> {
                     //future: getMoistureData(),
                     future: getAllData(),
                     builder: (BuildContext context, AsyncSnapshot snapshot) {
-                      int j=0;
+                      int j = 0;
                       //print(snapshot.data);
                       if (snapshot.data == null) {
                         return Container(
@@ -320,8 +350,11 @@ class _GraphScreenState extends State<GraphScreen> {
                   child: Container(
                     padding: EdgeInsets.all(10.0),
                     height: 150.0,
-                    width: MediaQuery.of(context).size.width/1.5,
-                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(10.0),color: Color(0xff00A961),),
+                    width: MediaQuery.of(context).size.width / 1.5,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10.0),
+                      color: Color(0xff00A961),
+                    ),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -338,7 +371,9 @@ class _GraphScreenState extends State<GraphScreen> {
                             )
                           ],
                         ),
-                        SizedBox(height: 10.0,),
+                        SizedBox(
+                          height: 10.0,
+                        ),
                         Row(
                           children: [
                             Image.asset('images/light.png',
@@ -352,7 +387,9 @@ class _GraphScreenState extends State<GraphScreen> {
                             )
                           ],
                         ),
-                        SizedBox(height: 10.0,),
+                        SizedBox(
+                          height: 10.0,
+                        ),
                         Row(
                           children: [
                             Image.asset('images/temperature-high.png',
@@ -390,4 +427,40 @@ Future<AllData> getAllData() async {
       moistureArr: moistureArr,
       temperatureArr: temperatureArr,
       lightIntensityArr: lightIntensityArr);
+}
+
+class TodaysData{
+  double avgMoisture;
+  double avgTemperature;
+  double avgLightIntensity;
+  TodaysData({this.avgMoisture,this.avgTemperature,this.avgLightIntensity});
+}
+
+Future<TodaysData> getTodaysData() async {
+  List<Moisture> moistureArr = await getTodaysMoistureData();
+  List<Temperature> temperatureArr = await getTodaysTemperatureData();
+  List<LightIntensity> lightIntensityArr = await getTodaysLightIntensityData();
+
+  double sumMoisture = 0.0;
+  for (Moisture m in moistureArr){
+    sumMoisture += m.data;
+  }
+  double avgMoisture = sumMoisture/moistureArr.length;
+
+  double sumTemperature = 0.0;
+  for (Temperature m in temperatureArr){
+    sumTemperature += m.data;
+  }
+  double avgTemperature = sumTemperature/temperatureArr.length;
+
+  double sumLightIntensity = 0.0;
+  for (LightIntensity m in lightIntensityArr){
+    sumLightIntensity += m.data;
+  }
+  double avgLightIntensity = sumLightIntensity/lightIntensityArr.length;
+  return TodaysData(
+    avgMoisture: avgMoisture,
+    avgTemperature: avgTemperature,
+    avgLightIntensity: avgLightIntensity
+  );
 }
