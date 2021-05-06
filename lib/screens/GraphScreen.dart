@@ -29,96 +29,233 @@ class _GraphScreenState extends State<GraphScreen> {
     return Scaffold(
       body: SafeArea(
           child: Container(
-        child: Column(
-          children: [
-            FutureBuilder(
-                future: getTodaysData(),
-                builder: (BuildContext context, AsyncSnapshot snapshot) {
-
-                  if (snapshot.data == null) {
-                    return Container(
-                      child: Center(
-                          child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text("Loading..."),
-                          Lottie.asset('images/tractor_animation.json')
-                        ],
-                      )),
-                    );
-                  } else {
-                    return Container(
-                      child: SfRadialGauge(
-                        backgroundColor: Color(0xff00A961),
-                        axes: <RadialAxis>[
-                          RadialAxis(
-                              minimum: 0,
-                              maximum: 200,
-                              labelOffset: 30,
-                              ranges: <GaugeRange>[
-                                GaugeRange(
-                                    startValue: 0,
-                                    endValue: 200,
-                                    sizeUnit: GaugeSizeUnit.factor,
-                                    startWidth: 0.03,
-                                    endWidth: 0.03,
-                                    gradient: SweepGradient(colors: const <Color>[
-                                      Colors.green,
-                                      Colors.yellow,
-                                      Colors.red
-                                    ], stops: const <double>[
-                                      0.0,
-                                      0.5,
-                                      1
-                                    ]))
-                              ],
-                              pointers: <GaugePointer>[
-                                NeedlePointer(
-                                    value: snapshot.data.avgMoisture,
-                                    needleLength: 0.95,
-                                    enableAnimation: true,
-                                    animationType: AnimationType.ease,
-                                    needleStartWidth: 1.5,
-                                    needleEndWidth: 6,
-                                    needleColor: Colors.red,
-                                    knobStyle: KnobStyle(knobRadius: 0.09))
-                              ],
-                              annotations: <GaugeAnnotation>[
-                                GaugeAnnotation(
-                                    widget: Container(
-                                        child: Column(children: <Widget>[
-                                          SizedBox(
-                                            height: 80.0,
-                                          ),
-                                          Text('150.0',
-                                              style: TextStyle(
-                                                  fontSize: 25, color: Colors.white)),
-                                          SizedBox(height: 10),
-                                          Text('Moisture',
-                                              style: TextStyle(
-                                                  fontSize: 14, color: Colors.white))
-                                        ])),
-                                    angle: 90,
-                                    positionFactor: 0.75)
-                              ],
-                              axisLineStyle: AxisLineStyle(
-                                  thicknessUnit: GaugeSizeUnit.factor, thickness: 0.03),
-                              majorTickStyle: MajorTickStyle(
-                                  length: 6, thickness: 4, color: Colors.white),
-                              minorTickStyle: MinorTickStyle(
-                                  length: 3, thickness: 3, color: Colors.white),
-                              axisLabelStyle: GaugeTextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 14))
-                        ],
+        child: FutureBuilder(
+            future: getTodaysData(),
+            builder: (BuildContext context, AsyncSnapshot snapshot) {
+              if (snapshot.data == null) {
+                return Container(
+                  child: Center(
+                      child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text("Loading..."),
+                      Lottie.asset('images/tractor_animation.json')
+                    ],
+                  )),
+                );
+              } else {
+                return SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.all(15.0),
+                    child: Column (
+                      children: [Container(
+                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(20.0),color: Color(0xff00A961)),
+                        child: SfRadialGauge(
+                          axes: <RadialAxis>[
+                            RadialAxis(
+                                minimum: 0,
+                                maximum: 200,
+                                labelOffset: 30,
+                                ranges: <GaugeRange>[
+                                  GaugeRange(
+                                      startValue: 0,
+                                      endValue: 200,
+                                      sizeUnit: GaugeSizeUnit.factor,
+                                      startWidth: 0.03,
+                                      endWidth: 0.03,
+                                      gradient: SweepGradient(colors: const <Color>[
+                                        Colors.green,
+                                        Colors.yellow,
+                                        Colors.red
+                                      ], stops: const <double>[
+                                        0.0,
+                                        0.5,
+                                        1
+                                      ]))
+                                ],
+                                pointers: <GaugePointer>[
+                                  NeedlePointer(
+                                      value: snapshot.data.avgMoisture,
+                                      needleLength: 0.95,
+                                      enableAnimation: true,
+                                      animationType: AnimationType.ease,
+                                      needleStartWidth: 1.5,
+                                      needleEndWidth: 6,
+                                      needleColor: Colors.red,
+                                      knobStyle: KnobStyle(knobRadius: 0.09))
+                                ],
+                                annotations: <GaugeAnnotation>[
+                                  GaugeAnnotation(
+                                      widget: Container(
+                                          child: Column(children: <Widget>[
+                                            SizedBox(
+                                              height: 80.0,
+                                            ),
+                                            Text(snapshot.data.avgMoisture.toString(),
+                                                style: TextStyle(
+                                                    fontSize: 25, color: Colors.white)),
+                                            SizedBox(height: 10),
+                                            Text('Moisture',
+                                                style: TextStyle(
+                                                    fontSize: 14, color: Colors.white))
+                                          ])),
+                                      angle: 90,
+                                      positionFactor: 0.75)
+                                ],
+                                axisLineStyle: AxisLineStyle(
+                                    thicknessUnit: GaugeSizeUnit.factor, thickness: 0.03),
+                                majorTickStyle: MajorTickStyle(
+                                    length: 6, thickness: 4, color: Colors.white),
+                                minorTickStyle: MinorTickStyle(
+                                    length: 3, thickness: 3, color: Colors.white),
+                                axisLabelStyle: GaugeTextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 14))
+                          ],
+                        ),
                       ),
-                    );
-                  }
-                }),
-
-          ],
-        ),
+                        SizedBox(height:20.0),
+                        Container(
+                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(20.0),color: Color(0xff00A961)),
+                          child: SfRadialGauge(
+                            axes: <RadialAxis>[
+                              RadialAxis(
+                                  minimum: 0,
+                                  maximum: 200,
+                                  labelOffset: 30,
+                                  ranges: <GaugeRange>[
+                                    GaugeRange(
+                                        startValue: 0,
+                                        endValue: 200,
+                                        sizeUnit: GaugeSizeUnit.factor,
+                                        startWidth: 0.03,
+                                        endWidth: 0.03,
+                                        gradient: SweepGradient(colors: const <Color>[
+                                          Colors.green,
+                                          Colors.yellow,
+                                          Colors.red
+                                        ], stops: const <double>[
+                                          0.0,
+                                          0.5,
+                                          1
+                                        ]))
+                                  ],
+                                  pointers: <GaugePointer>[
+                                    NeedlePointer(
+                                        value: snapshot.data.avgTemperature,
+                                        needleLength: 0.95,
+                                        enableAnimation: true,
+                                        animationType: AnimationType.ease,
+                                        needleStartWidth: 1.5,
+                                        needleEndWidth: 6,
+                                        needleColor: Colors.red,
+                                        knobStyle: KnobStyle(knobRadius: 0.09))
+                                  ],
+                                  annotations: <GaugeAnnotation>[
+                                    GaugeAnnotation(
+                                        widget: Container(
+                                            child: Column(children: <Widget>[
+                                              SizedBox(
+                                                height: 80.0,
+                                              ),
+                                              Text(snapshot.data.avgTemperature.toString().substring(0,5),
+                                                  style: TextStyle(
+                                                      fontSize: 25, color: Colors.white)),
+                                              SizedBox(height: 10),
+                                              Text('Temperature',
+                                                  style: TextStyle(
+                                                      fontSize: 14, color: Colors.white))
+                                            ])),
+                                        angle: 90,
+                                        positionFactor: 0.75)
+                                  ],
+                                  axisLineStyle: AxisLineStyle(
+                                      thicknessUnit: GaugeSizeUnit.factor, thickness: 0.03),
+                                  majorTickStyle: MajorTickStyle(
+                                      length: 6, thickness: 4, color: Colors.white),
+                                  minorTickStyle: MinorTickStyle(
+                                      length: 3, thickness: 3, color: Colors.white),
+                                  axisLabelStyle: GaugeTextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 14))
+                            ],
+                          ),
+                        ),
+                        SizedBox(height:20.0),
+                        Container(
+                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(20.0),color: Color(0xff00A961)),
+                          child: SfRadialGauge(
+                            axes: <RadialAxis>[
+                              RadialAxis(
+                                  minimum: 0,
+                                  maximum: 200,
+                                  labelOffset: 30,
+                                  ranges: <GaugeRange>[
+                                    GaugeRange(
+                                        startValue: 0,
+                                        endValue: 200,
+                                        sizeUnit: GaugeSizeUnit.factor,
+                                        startWidth: 0.03,
+                                        endWidth: 0.03,
+                                        gradient: SweepGradient(colors: const <Color>[
+                                          Colors.green,
+                                          Colors.yellow,
+                                          Colors.red
+                                        ], stops: const <double>[
+                                          0.0,
+                                          0.5,
+                                          1
+                                        ]))
+                                  ],
+                                  pointers: <GaugePointer>[
+                                    NeedlePointer(
+                                        value: snapshot.data.avgLightIntensity,
+                                        needleLength: 0.95,
+                                        enableAnimation: true,
+                                        animationType: AnimationType.ease,
+                                        needleStartWidth: 1.5,
+                                        needleEndWidth: 6,
+                                        needleColor: Colors.red,
+                                        knobStyle: KnobStyle(knobRadius: 0.09))
+                                  ],
+                                  annotations: <GaugeAnnotation>[
+                                    GaugeAnnotation(
+                                        widget: Container(
+                                            child: Column(children: <Widget>[
+                                              SizedBox(
+                                                height: 80.0,
+                                              ),
+                                              Text(snapshot.data.avgLightIntensity.toString().substring(0,5),
+                                                  style: TextStyle(
+                                                      fontSize: 25, color: Colors.white)),
+                                              SizedBox(height: 10),
+                                              Text('Light Intensity',
+                                                  style: TextStyle(
+                                                      fontSize: 14, color: Colors.white))
+                                            ])),
+                                        angle: 90,
+                                        positionFactor: 0.75)
+                                  ],
+                                  axisLineStyle: AxisLineStyle(
+                                      thicknessUnit: GaugeSizeUnit.factor, thickness: 0.03),
+                                  majorTickStyle: MajorTickStyle(
+                                      length: 6, thickness: 4, color: Colors.white),
+                                  minorTickStyle: MinorTickStyle(
+                                      length: 3, thickness: 3, color: Colors.white),
+                                  axisLabelStyle: GaugeTextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 14))
+                            ],
+                          ),
+                        )],
+                    ),
+                  ),
+                );
+              }
+            }),
       )),
       floatingActionButton: SpeedDial(
         marginEnd: 18,
@@ -136,14 +273,13 @@ class _GraphScreenState extends State<GraphScreen> {
         onClose: () => print('DIAL CLOSED'),
         tooltip: 'Speed Dial',
         heroTag: 'speed-dial-hero-tag',
-        backgroundColor: Color(0xff00A961),
-        foregroundColor: Colors.white,
+        backgroundColor: Colors.white,
+        foregroundColor: Color(0xff00A961),
         elevation: 8.0,
         shape: CircleBorder(),
         children: [
           SpeedDialChild(
-            child: Icon(
-              CupertinoIcons.graph_square,
+            child: Image.asset('images/graph.png',
               color: Colors.white,
             ),
             backgroundColor: Color(0xff00A961),
@@ -152,8 +288,7 @@ class _GraphScreenState extends State<GraphScreen> {
             onTap: () => _showGraph(context),
           ),
           SpeedDialChild(
-            child: Icon(
-              CupertinoIcons.arrow_down_circle_fill,
+            child: Image.asset('images/current_value.png',
               color: Colors.white,
             ),
             backgroundColor: Colors.blue,
@@ -446,7 +581,6 @@ Future<TodaysData> getTodaysData() async {
     sumMoisture += m.data;
   }
   double avgMoisture = sumMoisture/moistureArr.length;
-
   double sumTemperature = 0.0;
   for (Temperature m in temperatureArr){
     sumTemperature += m.data;

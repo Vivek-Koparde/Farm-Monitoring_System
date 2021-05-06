@@ -16,7 +16,6 @@ class Temperature{
   DateTime time;
   Temperature({this.data,this.time});
 }
-
 Future<List<Temperature>> getTodaysTemperatureData () async{
   print("method called");
   try{

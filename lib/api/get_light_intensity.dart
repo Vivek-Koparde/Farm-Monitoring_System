@@ -15,7 +15,6 @@ class LightIntensity{
   DateTime time;
   LightIntensity({this.data,this.time});
 }
-
 Future<List<LightIntensity>> getTodaysLightIntensityData () async{
   try{
     http.Response response = await http.get(baseURL+uid+"/"+today.toString());
