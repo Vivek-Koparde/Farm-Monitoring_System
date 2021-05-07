@@ -1,7 +1,9 @@
+import 'package:farm_monitoring_flutter/api/get_farm_data.dart';
 import 'package:farm_monitoring_flutter/api/get_light_intensity.dart';
 import 'package:farm_monitoring_flutter/api/get_temperature.dart';
 import 'package:farm_monitoring_flutter/api/get_moisture.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
+import 'package:farm_monitoring_flutter/models/FarmData.dart';
 import 'package:farm_monitoring_flutter/widgets/CustomeTimeGraph.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:lottie/lottie.dart';
@@ -21,11 +23,15 @@ class _GraphScreenState extends State<GraphScreen> {
   var timeMoisture = 1;
   var timeTemperature = 1;
   var timeLightIntensity = 1;
-
+  var timeSoilTemperature = 1;
+  var timeSoilMoisture1 = 1;
+  var timeSoilMoisture2 = 1;
+  var timeAirTemperature = 1;
+  var timeAirHumidity = 1;
+  var timeLeafWetness =1;
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       body: SafeArea(
           child: Container(
@@ -47,77 +53,12 @@ class _GraphScreenState extends State<GraphScreen> {
                 return SingleChildScrollView(
                   child: Padding(
                     padding: const EdgeInsets.all(15.0),
-                    child: Column (
-                      children: [Container(
-                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(20.0),color: Color(0xff00A961)),
-                        child: SfRadialGauge(
-                          axes: <RadialAxis>[
-                            RadialAxis(
-                                minimum: 0,
-                                maximum: 200,
-                                labelOffset: 30,
-                                ranges: <GaugeRange>[
-                                  GaugeRange(
-                                      startValue: 0,
-                                      endValue: 200,
-                                      sizeUnit: GaugeSizeUnit.factor,
-                                      startWidth: 0.03,
-                                      endWidth: 0.03,
-                                      gradient: SweepGradient(colors: const <Color>[
-                                        Colors.green,
-                                        Colors.yellow,
-                                        Colors.red
-                                      ], stops: const <double>[
-                                        0.0,
-                                        0.5,
-                                        1
-                                      ]))
-                                ],
-                                pointers: <GaugePointer>[
-                                  NeedlePointer(
-                                      value: snapshot.data.avgMoisture,
-                                      needleLength: 0.95,
-                                      enableAnimation: true,
-                                      animationType: AnimationType.ease,
-                                      needleStartWidth: 1.5,
-                                      needleEndWidth: 6,
-                                      needleColor: Colors.red,
-                                      knobStyle: KnobStyle(knobRadius: 0.09))
-                                ],
-                                annotations: <GaugeAnnotation>[
-                                  GaugeAnnotation(
-                                      widget: Container(
-                                          child: Column(children: <Widget>[
-                                            SizedBox(
-                                              height: 80.0,
-                                            ),
-                                            Text(snapshot.data.avgMoisture.toString(),
-                                                style: TextStyle(
-                                                    fontSize: 25, color: Colors.white)),
-                                            SizedBox(height: 10),
-                                            Text('Moisture',
-                                                style: TextStyle(
-                                                    fontSize: 14, color: Colors.white))
-                                          ])),
-                                      angle: 90,
-                                      positionFactor: 0.75)
-                                ],
-                                axisLineStyle: AxisLineStyle(
-                                    thicknessUnit: GaugeSizeUnit.factor, thickness: 0.03),
-                                majorTickStyle: MajorTickStyle(
-                                    length: 6, thickness: 4, color: Colors.white),
-                                minorTickStyle: MinorTickStyle(
-                                    length: 3, thickness: 3, color: Colors.white),
-                                axisLabelStyle: GaugeTextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 14))
-                          ],
-                        ),
-                      ),
-                        SizedBox(height:20.0),
+                    child: Column(
+                      children: [
                         Container(
-                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(20.0),color: Color(0xff00A961)),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20.0),
+                              color: Color(0xff00A961)),
                           child: SfRadialGauge(
                             axes: <RadialAxis>[
                               RadialAxis(
@@ -131,19 +72,21 @@ class _GraphScreenState extends State<GraphScreen> {
                                         sizeUnit: GaugeSizeUnit.factor,
                                         startWidth: 0.03,
                                         endWidth: 0.03,
-                                        gradient: SweepGradient(colors: const <Color>[
-                                          Colors.green,
-                                          Colors.yellow,
-                                          Colors.red
-                                        ], stops: const <double>[
-                                          0.0,
-                                          0.5,
-                                          1
-                                        ]))
+                                        gradient: SweepGradient(
+                                            colors: const <Color>[
+                                              Colors.green,
+                                              Colors.yellow,
+                                              Colors.red
+                                            ],
+                                            stops: const <double>[
+                                              0.0,
+                                              0.5,
+                                              1
+                                            ]))
                                   ],
                                   pointers: <GaugePointer>[
                                     NeedlePointer(
-                                        value: snapshot.data.avgTemperature,
+                                        value: snapshot.data.avgSoilTemperature,
                                         needleLength: 0.95,
                                         enableAnimation: true,
                                         animationType: AnimationType.ease,
@@ -156,26 +99,35 @@ class _GraphScreenState extends State<GraphScreen> {
                                     GaugeAnnotation(
                                         widget: Container(
                                             child: Column(children: <Widget>[
-                                              SizedBox(
-                                                height: 80.0,
-                                              ),
-                                              Text(snapshot.data.avgTemperature.toString().substring(0,5),
-                                                  style: TextStyle(
-                                                      fontSize: 25, color: Colors.white)),
-                                              SizedBox(height: 10),
-                                              Text('Temperature',
-                                                  style: TextStyle(
-                                                      fontSize: 14, color: Colors.white))
-                                            ])),
+                                          SizedBox(
+                                            height: 80.0,
+                                          ),
+                                          Text(
+                                              snapshot.data.avgSoilTemperature
+                                                  .toString(),
+                                              style: TextStyle(
+                                                  fontSize: 25,
+                                                  color: Colors.white)),
+                                          SizedBox(height: 10),
+                                          Text('Soil Temperature',
+                                              style: TextStyle(
+                                                  fontSize: 14,
+                                                  color: Colors.white))
+                                        ])),
                                         angle: 90,
                                         positionFactor: 0.75)
                                   ],
                                   axisLineStyle: AxisLineStyle(
-                                      thicknessUnit: GaugeSizeUnit.factor, thickness: 0.03),
+                                      thicknessUnit: GaugeSizeUnit.factor,
+                                      thickness: 0.03),
                                   majorTickStyle: MajorTickStyle(
-                                      length: 6, thickness: 4, color: Colors.white),
+                                      length: 6,
+                                      thickness: 4,
+                                      color: Colors.white),
                                   minorTickStyle: MinorTickStyle(
-                                      length: 3, thickness: 3, color: Colors.white),
+                                      length: 3,
+                                      thickness: 3,
+                                      color: Colors.white),
                                   axisLabelStyle: GaugeTextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.bold,
@@ -183,9 +135,11 @@ class _GraphScreenState extends State<GraphScreen> {
                             ],
                           ),
                         ),
-                        SizedBox(height:20.0),
+                        SizedBox(height: 20.0),
                         Container(
-                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(20.0),color: Color(0xff00A961)),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20.0),
+                              color: Color(0xff00A961)),
                           child: SfRadialGauge(
                             axes: <RadialAxis>[
                               RadialAxis(
@@ -199,19 +153,21 @@ class _GraphScreenState extends State<GraphScreen> {
                                         sizeUnit: GaugeSizeUnit.factor,
                                         startWidth: 0.03,
                                         endWidth: 0.03,
-                                        gradient: SweepGradient(colors: const <Color>[
-                                          Colors.green,
-                                          Colors.yellow,
-                                          Colors.red
-                                        ], stops: const <double>[
-                                          0.0,
-                                          0.5,
-                                          1
-                                        ]))
+                                        gradient: SweepGradient(
+                                            colors: const <Color>[
+                                              Colors.green,
+                                              Colors.yellow,
+                                              Colors.red
+                                            ],
+                                            stops: const <double>[
+                                              0.0,
+                                              0.5,
+                                              1
+                                            ]))
                                   ],
                                   pointers: <GaugePointer>[
                                     NeedlePointer(
-                                        value: snapshot.data.avgLightIntensity,
+                                        value: snapshot.data.avgSoilMoisture1,
                                         needleLength: 0.95,
                                         enableAnimation: true,
                                         animationType: AnimationType.ease,
@@ -224,33 +180,126 @@ class _GraphScreenState extends State<GraphScreen> {
                                     GaugeAnnotation(
                                         widget: Container(
                                             child: Column(children: <Widget>[
-                                              SizedBox(
-                                                height: 80.0,
-                                              ),
-                                              Text(snapshot.data.avgLightIntensity.toString().substring(0,5),
-                                                  style: TextStyle(
-                                                      fontSize: 25, color: Colors.white)),
-                                              SizedBox(height: 10),
-                                              Text('Light Intensity',
-                                                  style: TextStyle(
-                                                      fontSize: 14, color: Colors.white))
-                                            ])),
+                                          SizedBox(
+                                            height: 80.0,
+                                          ),
+                                          Text(
+                                              snapshot.data.avgSoilMoisture1
+                                                  .toString()
+                                                  ,
+                                              style: TextStyle(
+                                                  fontSize: 25,
+                                                  color: Colors.white)),
+                                          SizedBox(height: 10),
+                                          Text('Soil Moisture 1',
+                                              style: TextStyle(
+                                                  fontSize: 14,
+                                                  color: Colors.white))
+                                        ])),
                                         angle: 90,
                                         positionFactor: 0.75)
                                   ],
                                   axisLineStyle: AxisLineStyle(
-                                      thicknessUnit: GaugeSizeUnit.factor, thickness: 0.03),
+                                      thicknessUnit: GaugeSizeUnit.factor,
+                                      thickness: 0.03),
                                   majorTickStyle: MajorTickStyle(
-                                      length: 6, thickness: 4, color: Colors.white),
+                                      length: 6,
+                                      thickness: 4,
+                                      color: Colors.white),
                                   minorTickStyle: MinorTickStyle(
-                                      length: 3, thickness: 3, color: Colors.white),
+                                      length: 3,
+                                      thickness: 3,
+                                      color: Colors.white),
                                   axisLabelStyle: GaugeTextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.bold,
                                       fontSize: 14))
                             ],
                           ),
-                        )],
+                        ),
+                        SizedBox(height: 20.0),
+                        Container(
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20.0),
+                              color: Color(0xff00A961)),
+                          child: SfRadialGauge(
+                            axes: <RadialAxis>[
+                              RadialAxis(
+                                  minimum: 0,
+                                  maximum: 200,
+                                  labelOffset: 30,
+                                  ranges: <GaugeRange>[
+                                    GaugeRange(
+                                        startValue: 0,
+                                        endValue: 200,
+                                        sizeUnit: GaugeSizeUnit.factor,
+                                        startWidth: 0.03,
+                                        endWidth: 0.03,
+                                        gradient: SweepGradient(
+                                            colors: const <Color>[
+                                              Colors.green,
+                                              Colors.yellow,
+                                              Colors.red
+                                            ],
+                                            stops: const <double>[
+                                              0.0,
+                                              0.5,
+                                              1
+                                            ]))
+                                  ],
+                                  pointers: <GaugePointer>[
+                                    NeedlePointer(
+                                        value: snapshot.data.avgSoilMoisture2,
+                                        needleLength: 0.95,
+                                        enableAnimation: true,
+                                        animationType: AnimationType.ease,
+                                        needleStartWidth: 1.5,
+                                        needleEndWidth: 6,
+                                        needleColor: Colors.red,
+                                        knobStyle: KnobStyle(knobRadius: 0.09))
+                                  ],
+                                  annotations: <GaugeAnnotation>[
+                                    GaugeAnnotation(
+                                        widget: Container(
+                                            child: Column(children: <Widget>[
+                                          SizedBox(
+                                            height: 80.0,
+                                          ),
+                                          Text(
+                                              snapshot.data.avgSoilMoisture2
+                                                  .toString(),
+
+                                              style: TextStyle(
+                                                  fontSize: 25,
+                                                  color: Colors.white)),
+                                          SizedBox(height: 10),
+                                          Text('Soil Moisture 2',
+                                              style: TextStyle(
+                                                  fontSize: 14,
+                                                  color: Colors.white))
+                                        ])),
+                                        angle: 90,
+                                        positionFactor: 0.75)
+                                  ],
+                                  axisLineStyle: AxisLineStyle(
+                                      thicknessUnit: GaugeSizeUnit.factor,
+                                      thickness: 0.03),
+                                  majorTickStyle: MajorTickStyle(
+                                      length: 6,
+                                      thickness: 4,
+                                      color: Colors.white),
+                                  minorTickStyle: MinorTickStyle(
+                                      length: 3,
+                                      thickness: 3,
+                                      color: Colors.white),
+                                  axisLabelStyle: GaugeTextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 14))
+                            ],
+                          ),
+                        )
+                      ],
                     ),
                   ),
                 );
@@ -279,7 +328,8 @@ class _GraphScreenState extends State<GraphScreen> {
         shape: CircleBorder(),
         children: [
           SpeedDialChild(
-            child: Image.asset('images/graph.png',
+            child: Image.asset(
+              'images/graph.png',
               color: Colors.white,
             ),
             backgroundColor: Color(0xff00A961),
@@ -288,7 +338,8 @@ class _GraphScreenState extends State<GraphScreen> {
             onTap: () => _showGraph(context),
           ),
           SpeedDialChild(
-            child: Image.asset('images/current_value.png',
+            child: Image.asset(
+              'images/current_value.png',
               color: Colors.white,
             ),
             backgroundColor: Colors.blue,
@@ -311,7 +362,7 @@ class _GraphScreenState extends State<GraphScreen> {
                   color: Colors.white,
                   child: FutureBuilder(
                     //future: getMoistureData(),
-                    future: getAllData(),
+                    future: getFarmData(),
                     builder: (BuildContext context, AsyncSnapshot snapshot) {
                       int j = 0;
                       //print(snapshot.data);
@@ -333,77 +384,209 @@ class _GraphScreenState extends State<GraphScreen> {
                           )),
                         );
                       } else {
-                        List<charts.Series<Moisture, DateTime>>
-                            _createMoistureData() {
+                        //TODO:Change starts
+
+                        //SoilTemperature
+                        List<charts.Series<SoilTemperature, DateTime>>
+                            _createSoilTemperatureData() {
                           int i = 0;
-                          List<Moisture> data = [];
-                          for (var x in snapshot.data.moistureArr) {
-                            if (i % timeMoisture == 0)
-                              data.add(Moisture(time: x.time, data: x.data));
+                          List<SoilTemperature> data = [];
+                          for (var x in snapshot.data.arrSoilTemperature) {
+                            if (i % timeSoilTemperature == 0)
+                              data.add(
+                                  SoilTemperature(time: x.time, data: x.data));
                             i++;
                           }
                           return [
-                            new charts.Series<Moisture, DateTime>(
-                              id: 'Moisture',
+                            new charts.Series<SoilTemperature, DateTime>(
+                              id: 'SoilTemperature',
                               colorFn: (_, __) =>
                                   charts.MaterialPalette.green.shadeDefault,
-                              domainFn: (Moisture sales, _) => sales.time,
-                              measureFn: (Moisture sales, _) => sales.data,
+                              domainFn: (SoilTemperature d, _) => d.time,
+                              measureFn: (SoilTemperature d, _) => d.data,
                               data: data,
                             )
                           ];
                         }
 
-                        changeMoisture(newMoisture) {
+                        changeSoilTemperature(newSoilTemperature) {
                           setState(() {
-                            timeMoisture = newMoisture;
+                            timeSoilTemperature = newSoilTemperature;
                           }); // print(timeTemperatureIntensity);
                           (context as Element).reassemble();
                         }
-                        // return ListView.builder(
-                        //     itemCount: snapshot.data.length,
-                        //     itemBuilder: (BuildContext context,int index){
-                        //       return ListTile(
-                        //         title: Text(snapshot.data[index].data.toString()),
-                        //       );
-                        //     }
-                        // );
 
-                        List<charts.Series<Temperature, DateTime>>
-                            _createTemperatureData() {
+                        //SoilMoisture1
+                        List<charts.Series<SoilMoisture1, DateTime>>
+                            _createSoilMoisture1Data() {
                           int i = 0;
-                          List<Temperature> data = [];
-                          for (var x in snapshot.data.temperatureArr) {
-                            if (i % timeTemperature == 0)
-                              data.add(Temperature(time: x.time, data: x.data));
+                          List<SoilMoisture1> data = [];
+                          for (var x in snapshot.data.arrSoilMoisture1) {
+                            if (i % timeSoilMoisture1 == 0)
+                              data.add(
+                                  SoilMoisture1(time: x.time, data: x.data));
                             i++;
                           }
 
                           return [
-                            new charts.Series<Temperature, DateTime>(
-                              id: 'Temperature',
+                            new charts.Series<SoilMoisture1, DateTime>(
+                              id: 'SoilMoisture1',
                               colorFn: (_, __) =>
                                   charts.MaterialPalette.green.shadeDefault,
-                              domainFn: (Temperature sales, _) => sales.time,
-                              measureFn: (Temperature sales, _) => sales.data,
+                              domainFn: (SoilMoisture1 sales, _) => sales.time,
+                              measureFn: (SoilMoisture1 sales, _) => sales.data,
                               data: data,
                             )
                           ];
                         }
 
-                        changeTemperature(newTemperature) {
+                        changeSoilMoisture1(newSoilMoisture1) {
                           setState(() {
-                            timeTemperature = newTemperature;
+                            timeSoilMoisture1 = newSoilMoisture1;
+                          });
+                          (context as Element).reassemble();
+                        }
+
+                        //SoilMoisture2
+                        List<charts.Series<SoilMoisture2, DateTime>>
+                            _createSoilMoisture2Data() {
+                          int i = 0;
+                          List<SoilMoisture2> data = [];
+                          for (var x in snapshot.data.arrSoilMoisture2) {
+                            if (i % timeSoilMoisture2 == 0)
+                              //data.add(SoilMoisture2(time:x.time,x.data));
+                              data.add(
+                                  SoilMoisture2(time: x.time, data: x.data));
+                            i++;
+                          }
+
+                          return [
+                            new charts.Series<SoilMoisture2, DateTime>(
+                              id: 'SoilMoisture2',
+                              colorFn: (_, __) =>
+                                  charts.MaterialPalette.green.shadeDefault,
+                              domainFn: (SoilMoisture2 sales, _) => sales.time,
+                              measureFn: (SoilMoisture2 sales, _) => sales.data,
+                              data: data,
+                            )
+                          ];
+                        }
+
+                        changeSoilMoisture2(newSoilMoisture2) {
+                          setState(() {
+                            timeSoilMoisture2 = newSoilMoisture2;
                           });
                           (context as Element).reassemble();
                           //   print(timeTemperatureIntensity);
                         }
 
+
+                        //Air Temperature
+                        List<charts.Series<AirTemperature, DateTime>>
+                        _createAirTemperatureData() {
+                          int i = 0;
+                          List<AirTemperature> data = [];
+                          for (var x in snapshot.data.arrAirTemperature) {
+                            if (i % timeAirTemperature == 0)
+                              //data.add(AirTemperature(time:x.time,x.data));
+                              data.add(
+                                  AirTemperature(time: x.time, data: x.data));
+                            i++;
+                          }
+
+                          return [
+                            new charts.Series<AirTemperature, DateTime>(
+                              id: 'AirTemperature',
+                              colorFn: (_, __) =>
+                              charts.MaterialPalette.green.shadeDefault,
+                              domainFn: (AirTemperature sales, _) => sales.time,
+                              measureFn: (AirTemperature sales, _) => sales.data,
+                              data: data,
+                            )
+                          ];
+                        }
+
+                        changeAirTemperature(newAirTemperature) {
+                          setState(() {
+                            timeAirTemperature = newAirTemperature;
+                          });
+                          (context as Element).reassemble();
+                          //   print(timeTemperatureIntensity);
+                        }
+
+                        //Air Humidity
+                        List<charts.Series<AirHumidity, DateTime>>
+                        _createAirHumidityData() {
+                          int i = 0;
+                          List<AirHumidity> data = [];
+                          for (var x in snapshot.data.arrAirHumidity) {
+                            if (i % timeAirHumidity == 0)
+                              //data.add(AirHumidity(time:x.time,x.data));
+                              data.add(
+                                  AirHumidity(time: x.time, data: x.data));
+                            i++;
+                          }
+
+                          return [
+                            new charts.Series<AirHumidity, DateTime>(
+                              id: 'AirHumidity',
+                              colorFn: (_, __) =>
+                              charts.MaterialPalette.green.shadeDefault,
+                              domainFn: (AirHumidity sales, _) => sales.time,
+                              measureFn: (AirHumidity sales, _) => sales.data,
+                              data: data,
+                            )
+                          ];
+                        }
+
+                        changeAirHumidity(newAirHumidity) {
+                          setState(() {
+                            timeAirHumidity = newAirHumidity;
+                          });
+                          (context as Element).reassemble();
+                          //   print(timeTemperatureIntensity);
+                        }
+
+                        //Leaf Wetness
+                        List<charts.Series<LeafWetness, DateTime>>
+                        _createLeafWetnessData() {
+                          int i = 0;
+                          List<LeafWetness> data = [];
+                          for (var x in snapshot.data.arrLeafWetness) {
+                            if (i % timeLeafWetness == 0)
+                              //data.add(LeafWetness(time:x.time,x.data));
+                              data.add(
+                                  LeafWetness(time: x.time, data: x.data));
+                            i++;
+                          }
+
+                          return [
+                            new charts.Series<LeafWetness, DateTime>(
+                              id: 'LeafWetness',
+                              colorFn: (_, __) =>
+                              charts.MaterialPalette.green.shadeDefault,
+                              domainFn: (LeafWetness sales, _) => sales.time,
+                              measureFn: (LeafWetness sales, _) => sales.data,
+                              data: data,
+                            )
+                          ];
+                        }
+
+                        changeLeafWetness(newLeafWetness) {
+                          setState(() {
+                            timeLeafWetness = newLeafWetness;
+                          });
+                          (context as Element).reassemble();
+                          //   print(timeTemperatureIntensity);
+                        }
+
+
+                        //Light Intensity
                         List<charts.Series<LightIntensity, DateTime>>
-                            _createLightIntensityData() {
+                        _createLightIntensityData() {
                           int i = 0;
                           List<LightIntensity> data = [];
-                          for (var x in snapshot.data.lightIntensityArr) {
+                          for (var x in snapshot.data.arrLightIntensity) {
                             if (i % timeLightIntensity == 0)
                               //data.add(LightIntensity(time:x.time,x.data));
                               data.add(
@@ -415,10 +598,9 @@ class _GraphScreenState extends State<GraphScreen> {
                             new charts.Series<LightIntensity, DateTime>(
                               id: 'LightIntensity',
                               colorFn: (_, __) =>
-                                  charts.MaterialPalette.green.shadeDefault,
+                              charts.MaterialPalette.green.shadeDefault,
                               domainFn: (LightIntensity sales, _) => sales.time,
-                              measureFn: (LightIntensity sales, _) =>
-                                  sales.data,
+                              measureFn: (LightIntensity sales, _) => sales.data,
                               data: data,
                             )
                           ];
@@ -432,6 +614,8 @@ class _GraphScreenState extends State<GraphScreen> {
                           //   print(timeTemperatureIntensity);
                         }
 
+                        //TODO: Change ends
+
                         return SingleChildScrollView(
                           child: Column(
                             children: [
@@ -439,19 +623,55 @@ class _GraphScreenState extends State<GraphScreen> {
                                 height: 40,
                               ),
                               CustomTimeGraph(
-                                title: "Moisture",
-                                changeTime: changeMoisture,
-                                time: timeMoisture,
-                                createSampleData: _createMoistureData,
+                                title: "Soil Temperature",
+                                changeTime: changeSoilTemperature,
+                                time: timeSoilTemperature,
+                                createSampleData: _createSoilTemperatureData,
                               ),
                               SizedBox(
                                 height: 40,
                               ),
                               CustomTimeGraph(
-                                title: "Temperature",
-                                changeTime: changeTemperature,
-                                time: timeTemperature,
-                                createSampleData: _createTemperatureData,
+                                title: "Soil Moisture 1",
+                                changeTime: changeSoilMoisture1,
+                                time: timeSoilMoisture1,
+                                createSampleData: _createSoilMoisture1Data,
+                              ),
+                              SizedBox(
+                                height: 40,
+                              ),
+                              CustomTimeGraph(
+                                title: "Soil Moisture 2",
+                                changeTime: changeSoilMoisture1,
+                                time: timeSoilMoisture2,
+                                createSampleData: _createSoilMoisture2Data,
+                              ),
+                              SizedBox(
+                                height: 40,
+                              ),
+                              CustomTimeGraph(
+                                title: "Air Temperature",
+                                changeTime: changeAirTemperature,
+                                time: timeAirTemperature,
+                                createSampleData: _createAirTemperatureData,
+                              ),
+                              SizedBox(
+                                height: 40,
+                              ),
+                              CustomTimeGraph(
+                                title: "Air Humidity",
+                                changeTime: changeAirHumidity,
+                                time: timeAirHumidity,
+                                createSampleData: _createAirHumidityData,
+                              ),
+                              SizedBox(
+                                height: 40,
+                              ),
+                              CustomTimeGraph(
+                                title: "Leaf Wetness",
+                                changeTime: changeLeafWetness,
+                                time: timeLeafWetness,
+                                createSampleData: _createLeafWetnessData,
                               ),
                               SizedBox(
                                 height: 40,
@@ -550,51 +770,108 @@ class _GraphScreenState extends State<GraphScreen> {
 class AllData {
   List<Moisture> moistureArr;
   List<Temperature> temperatureArr;
-  List<LightIntensity> lightIntensityArr;
+  List<LightIntensity1> lightIntensityArr;
   AllData({this.moistureArr, this.temperatureArr, this.lightIntensityArr});
 }
 
 Future<AllData> getAllData() async {
   List<Moisture> moistureArr = await getMoistureData();
   List<Temperature> temperatureArr = await getTemperatureData();
-  List<LightIntensity> lightIntensityArr = await getLightIntensityData();
+  List<LightIntensity1> lightIntensityArr = await getLightIntensityData();
   return AllData(
       moistureArr: moistureArr,
       temperatureArr: temperatureArr,
       lightIntensityArr: lightIntensityArr);
 }
 
-class TodaysData{
-  double avgMoisture;
-  double avgTemperature;
+class TodaysData {
+  List<SoilTemperature> arrSoilTemperature;
+  List<SoilMoisture1> arrSoilMoisture1;
+  List<SoilMoisture2> arrSoilMoisture2;
+  List<AirTemperature> arrAirTemperature;
+  List<AirHumidity> arrAirHumidity;
+  List<LeafWetness> arrLeafWetness;
+  List<LightIntensity> arrLightIntensity;
+
+
+  double avgSoilTemperature;
+  double avgSoilMoisture1;
+  double avgSoilMoisture2;
+  double avgAirTemperature;
+  double avgAirHumidity;
+  double avgAirLeafWetness;
   double avgLightIntensity;
-  TodaysData({this.avgMoisture,this.avgTemperature,this.avgLightIntensity});
+
+  TodaysData({
+    this.avgSoilTemperature,
+    this.avgSoilMoisture1,
+    this.avgSoilMoisture2,
+    this.avgAirTemperature,
+    this.avgAirHumidity,
+    this.avgAirLeafWetness,
+    this.avgLightIntensity
+});
 }
 
-Future<TodaysData> getTodaysData() async {
-  List<Moisture> moistureArr = await getTodaysMoistureData();
-  List<Temperature> temperatureArr = await getTodaysTemperatureData();
-  List<LightIntensity> lightIntensityArr = await getTodaysLightIntensityData();
 
-  double sumMoisture = 0.0;
-  for (Moisture m in moistureArr){
-    sumMoisture += m.data;
+Future<TodaysData> getTodaysData() async {
+  FarmData todaysFarmData = await getTodaysFarmData();
+
+
+  double sumSoilTemperature = 0.0;
+  for (SoilTemperature m in todaysFarmData.arrSoilTemperature) {
+    sumSoilTemperature += m.data;
   }
-  double avgMoisture = sumMoisture/moistureArr.length;
-  double sumTemperature = 0.0;
-  for (Temperature m in temperatureArr){
-    sumTemperature += m.data;
+  double avgSoilTemperature = sumSoilTemperature / todaysFarmData.arrSoilTemperature.length;
+
+  double sumSoilMoisture1 = 0.0;
+  for (SoilMoisture1 m in todaysFarmData.arrSoilMoisture1) {
+    sumSoilMoisture1 += m.data;
   }
-  double avgTemperature = sumTemperature/temperatureArr.length;
+  double avgSoilMoisture1 = sumSoilMoisture1 / todaysFarmData.arrSoilMoisture1.length;
+
+
+  double sumSoilMoisture2 = 0.0;
+  for (SoilMoisture2 m in todaysFarmData.arrSoilMoisture2) {
+    sumSoilMoisture2 += m.data;
+  }
+  double avgSoilMoisture2 = sumSoilMoisture2 / todaysFarmData.arrSoilMoisture2.length;
+
+
+  double sumAirTemperature = 0.0;
+  for (AirTemperature m in todaysFarmData.arrAirTemperature) {
+    sumAirTemperature += m.data;
+  }
+  double avgAirTemperature = sumAirTemperature / todaysFarmData.arrAirTemperature.length;
+
+
+  double sumAirHumidity = 0.0;
+  for (AirHumidity m in todaysFarmData.arrAirHumidity) {
+    sumAirHumidity += m.data;
+  }
+  double avgAirHumidity = sumAirHumidity / todaysFarmData.arrAirHumidity.length;
+
+
+  double sumLeafWetness = 0.0;
+  for (LeafWetness m in todaysFarmData.arrLeafWetness) {
+    sumLeafWetness += m.data;
+  }
+  double avgLeafWetness = sumLeafWetness / todaysFarmData.arrLeafWetness.length;
+
 
   double sumLightIntensity = 0.0;
-  for (LightIntensity m in lightIntensityArr){
+  for (LightIntensity m in todaysFarmData.arrLightIntensity) {
     sumLightIntensity += m.data;
   }
-  double avgLightIntensity = sumLightIntensity/lightIntensityArr.length;
+  double avgLightIntensity = sumLightIntensity / todaysFarmData.arrLightIntensity.length;
+
   return TodaysData(
-    avgMoisture: avgMoisture,
-    avgTemperature: avgTemperature,
+    avgSoilTemperature: avgSoilTemperature,
+    avgSoilMoisture1: avgSoilMoisture1,
+    avgSoilMoisture2: avgSoilMoisture2,
+    avgAirHumidity: avgAirHumidity,
+    avgAirTemperature: avgAirTemperature,
+    avgAirLeafWetness: avgLeafWetness,
     avgLightIntensity: avgLightIntensity
   );
 }

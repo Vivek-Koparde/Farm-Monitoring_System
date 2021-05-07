@@ -10,15 +10,15 @@ String baseURL = 'https://infinite-fjord-59639.herokuapp.com/farmData/';
 DateTime today = DateTime.parse("2021-03-02T17:30:00.000+00:00");
 
 
-class LightIntensity{
+class LightIntensity1{
   int data;
   DateTime time;
-  LightIntensity({this.data,this.time});
+  LightIntensity1({this.data,this.time});
 }
-Future<List<LightIntensity>> getTodaysLightIntensityData () async{
+Future<List<LightIntensity1>> getTodaysLightIntensityData () async{
   try{
     http.Response response = await http.get(baseURL+uid+"/"+today.toString());
-    List<LightIntensity> arr = [];
+    List<LightIntensity1> arr = [];
     if (response.statusCode == 200) {
       var data = response.body;
       //print(jsonDecode(data));
@@ -30,7 +30,7 @@ Future<List<LightIntensity>> getTodaysLightIntensityData () async{
         print(x);
         if (x['lightIntensity'] != null) {
 
-          arr.add(LightIntensity(data: double.parse(x['lightIntensity']).toInt(),
+          arr.add(LightIntensity1(data: double.parse(x['lightIntensity']).toInt(),
               time: DateTime.parse(x['time'])));
         }
       }
@@ -45,12 +45,12 @@ Future<List<LightIntensity>> getTodaysLightIntensityData () async{
 
 }
 
-Future<List<LightIntensity>> getLightIntensityData () async{
+Future<List<LightIntensity1>> getLightIntensityData () async{
   print("method called");
   try{
     //http.Response response = await http.get('https://api.thingspeak.com/channels/1288997/fields/3.json?api_key=GG8YZU6QEOKRPEHM&results');
     http.Response response = await http.get(baseURL+uid);
-    List<LightIntensity> arr = [];
+    List<LightIntensity1> arr = [];
     if (response.statusCode == 200) {
       var data = response.body;
       //print(jsonDecode(data));
@@ -62,7 +62,7 @@ Future<List<LightIntensity>> getLightIntensityData () async{
         print(x);
         if (x['lightIntensity'] != null) {
 
-          arr.add(LightIntensity(data: double.parse(x['lightIntensity']).toInt(),
+          arr.add(LightIntensity1(data: double.parse(x['lightIntensity']).toInt(),
               time: DateTime.parse(x['time'])));
         }
       }

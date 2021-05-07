@@ -1,3 +1,4 @@
+import 'package:farm_monitoring_flutter/api/get_farm_data.dart';
 import 'package:farm_monitoring_flutter/screens/login.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -34,9 +35,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 SizedBox(height: 20,),
                 FlatButton(
                   color: Colors.green,
-                    onPressed: (){
-                      _auth.signOut();
-                        Navigator.popAndPushNamed(context, Login.id);
+                    onPressed: () async{
+                      // _auth.signOut();
+                      //   Navigator.popAndPushNamed(context, Login.id);
+
+                      //TODO: change to normal
+                      await getFarmData();
                     },
                     child:Text('Logout'),
                 )
