@@ -4,6 +4,7 @@ import 'package:farm_monitoring_flutter/api/get_temperature.dart';
 import 'package:farm_monitoring_flutter/api/get_moisture.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:farm_monitoring_flutter/models/FarmData.dart';
+import 'file:///C:/Users/Vivek/AndroidStudioProjects/farm-monitoring-flutter/lib/screens/GraphScreen/SpeedoMeterScreen.dart';
 import 'package:farm_monitoring_flutter/widgets/CustomeTimeGraph.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:lottie/lottie.dart';
@@ -12,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
 
 class GraphScreen extends StatefulWidget {
+  static String id="graphScreen";
   @override
   _GraphScreenState createState() => _GraphScreenState();
 }
@@ -34,278 +36,7 @@ class _GraphScreenState extends State<GraphScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-          child: Container(
-        child: FutureBuilder(
-            future: getTodaysData(),
-            builder: (BuildContext context, AsyncSnapshot snapshot) {
-              if (snapshot.data == null) {
-                return Container(
-                  child: Center(
-                      child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text("Loading..."),
-                      Lottie.asset('images/tractor_animation.json')
-                    ],
-                  )),
-                );
-              } else {
-                return SingleChildScrollView(
-                  child: Padding(
-                    padding: const EdgeInsets.all(15.0),
-                    child: Column(
-                      children: [
-                        Container(
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20.0),
-                              color: Color(0xff00A961)),
-                          child: SfRadialGauge(
-                            axes: <RadialAxis>[
-                              RadialAxis(
-                                  minimum: 0,
-                                  maximum: 200,
-                                  labelOffset: 30,
-                                  ranges: <GaugeRange>[
-                                    GaugeRange(
-                                        startValue: 0,
-                                        endValue: 200,
-                                        sizeUnit: GaugeSizeUnit.factor,
-                                        startWidth: 0.03,
-                                        endWidth: 0.03,
-                                        gradient: SweepGradient(
-                                            colors: const <Color>[
-                                              Colors.green,
-                                              Colors.yellow,
-                                              Colors.red
-                                            ],
-                                            stops: const <double>[
-                                              0.0,
-                                              0.5,
-                                              1
-                                            ]))
-                                  ],
-                                  pointers: <GaugePointer>[
-                                    NeedlePointer(
-                                        value: snapshot.data.avgSoilTemperature,
-                                        needleLength: 0.95,
-                                        enableAnimation: true,
-                                        animationType: AnimationType.ease,
-                                        needleStartWidth: 1.5,
-                                        needleEndWidth: 6,
-                                        needleColor: Colors.red,
-                                        knobStyle: KnobStyle(knobRadius: 0.09))
-                                  ],
-                                  annotations: <GaugeAnnotation>[
-                                    GaugeAnnotation(
-                                        widget: Container(
-                                            child: Column(children: <Widget>[
-                                          SizedBox(
-                                            height: 80.0,
-                                          ),
-                                          Text(
-                                              snapshot.data.avgSoilTemperature
-                                                  .toString(),
-                                              style: TextStyle(
-                                                  fontSize: 25,
-                                                  color: Colors.white)),
-                                          SizedBox(height: 10),
-                                          Text('Soil Temperature',
-                                              style: TextStyle(
-                                                  fontSize: 14,
-                                                  color: Colors.white))
-                                        ])),
-                                        angle: 90,
-                                        positionFactor: 0.75)
-                                  ],
-                                  axisLineStyle: AxisLineStyle(
-                                      thicknessUnit: GaugeSizeUnit.factor,
-                                      thickness: 0.03),
-                                  majorTickStyle: MajorTickStyle(
-                                      length: 6,
-                                      thickness: 4,
-                                      color: Colors.white),
-                                  minorTickStyle: MinorTickStyle(
-                                      length: 3,
-                                      thickness: 3,
-                                      color: Colors.white),
-                                  axisLabelStyle: GaugeTextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 14))
-                            ],
-                          ),
-                        ),
-                        SizedBox(height: 20.0),
-                        Container(
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20.0),
-                              color: Color(0xff00A961)),
-                          child: SfRadialGauge(
-                            axes: <RadialAxis>[
-                              RadialAxis(
-                                  minimum: 0,
-                                  maximum: 200,
-                                  labelOffset: 30,
-                                  ranges: <GaugeRange>[
-                                    GaugeRange(
-                                        startValue: 0,
-                                        endValue: 200,
-                                        sizeUnit: GaugeSizeUnit.factor,
-                                        startWidth: 0.03,
-                                        endWidth: 0.03,
-                                        gradient: SweepGradient(
-                                            colors: const <Color>[
-                                              Colors.green,
-                                              Colors.yellow,
-                                              Colors.red
-                                            ],
-                                            stops: const <double>[
-                                              0.0,
-                                              0.5,
-                                              1
-                                            ]))
-                                  ],
-                                  pointers: <GaugePointer>[
-                                    NeedlePointer(
-                                        value: snapshot.data.avgSoilMoisture1,
-                                        needleLength: 0.95,
-                                        enableAnimation: true,
-                                        animationType: AnimationType.ease,
-                                        needleStartWidth: 1.5,
-                                        needleEndWidth: 6,
-                                        needleColor: Colors.red,
-                                        knobStyle: KnobStyle(knobRadius: 0.09))
-                                  ],
-                                  annotations: <GaugeAnnotation>[
-                                    GaugeAnnotation(
-                                        widget: Container(
-                                            child: Column(children: <Widget>[
-                                          SizedBox(
-                                            height: 80.0,
-                                          ),
-                                          Text(
-                                              snapshot.data.avgSoilMoisture1
-                                                  .toString()
-                                                  ,
-                                              style: TextStyle(
-                                                  fontSize: 25,
-                                                  color: Colors.white)),
-                                          SizedBox(height: 10),
-                                          Text('Soil Moisture 1',
-                                              style: TextStyle(
-                                                  fontSize: 14,
-                                                  color: Colors.white))
-                                        ])),
-                                        angle: 90,
-                                        positionFactor: 0.75)
-                                  ],
-                                  axisLineStyle: AxisLineStyle(
-                                      thicknessUnit: GaugeSizeUnit.factor,
-                                      thickness: 0.03),
-                                  majorTickStyle: MajorTickStyle(
-                                      length: 6,
-                                      thickness: 4,
-                                      color: Colors.white),
-                                  minorTickStyle: MinorTickStyle(
-                                      length: 3,
-                                      thickness: 3,
-                                      color: Colors.white),
-                                  axisLabelStyle: GaugeTextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 14))
-                            ],
-                          ),
-                        ),
-                        SizedBox(height: 20.0),
-                        Container(
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20.0),
-                              color: Color(0xff00A961)),
-                          child: SfRadialGauge(
-                            axes: <RadialAxis>[
-                              RadialAxis(
-                                  minimum: 0,
-                                  maximum: 200,
-                                  labelOffset: 30,
-                                  ranges: <GaugeRange>[
-                                    GaugeRange(
-                                        startValue: 0,
-                                        endValue: 200,
-                                        sizeUnit: GaugeSizeUnit.factor,
-                                        startWidth: 0.03,
-                                        endWidth: 0.03,
-                                        gradient: SweepGradient(
-                                            colors: const <Color>[
-                                              Colors.green,
-                                              Colors.yellow,
-                                              Colors.red
-                                            ],
-                                            stops: const <double>[
-                                              0.0,
-                                              0.5,
-                                              1
-                                            ]))
-                                  ],
-                                  pointers: <GaugePointer>[
-                                    NeedlePointer(
-                                        value: snapshot.data.avgSoilMoisture2,
-                                        needleLength: 0.95,
-                                        enableAnimation: true,
-                                        animationType: AnimationType.ease,
-                                        needleStartWidth: 1.5,
-                                        needleEndWidth: 6,
-                                        needleColor: Colors.red,
-                                        knobStyle: KnobStyle(knobRadius: 0.09))
-                                  ],
-                                  annotations: <GaugeAnnotation>[
-                                    GaugeAnnotation(
-                                        widget: Container(
-                                            child: Column(children: <Widget>[
-                                          SizedBox(
-                                            height: 80.0,
-                                          ),
-                                          Text(
-                                              snapshot.data.avgSoilMoisture2
-                                                  .toString(),
-
-                                              style: TextStyle(
-                                                  fontSize: 25,
-                                                  color: Colors.white)),
-                                          SizedBox(height: 10),
-                                          Text('Soil Moisture 2',
-                                              style: TextStyle(
-                                                  fontSize: 14,
-                                                  color: Colors.white))
-                                        ])),
-                                        angle: 90,
-                                        positionFactor: 0.75)
-                                  ],
-                                  axisLineStyle: AxisLineStyle(
-                                      thicknessUnit: GaugeSizeUnit.factor,
-                                      thickness: 0.03),
-                                  majorTickStyle: MajorTickStyle(
-                                      length: 6,
-                                      thickness: 4,
-                                      color: Colors.white),
-                                  minorTickStyle: MinorTickStyle(
-                                      length: 3,
-                                      thickness: 3,
-                                      color: Colors.white),
-                                  axisLabelStyle: GaugeTextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 14))
-                            ],
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                );
-              }
-            }),
-      )),
+          child: SpeedoMeter()),
       floatingActionButton: SpeedDial(
         marginEnd: 18,
         marginBottom: 20,
@@ -328,20 +59,14 @@ class _GraphScreenState extends State<GraphScreen> {
         shape: CircleBorder(),
         children: [
           SpeedDialChild(
-            child: Image.asset(
-              'images/graph.png',
-              color: Colors.white,
-            ),
+            child: Icon(CupertinoIcons.arrow_down_circle_fill),
             backgroundColor: Color(0xff00A961),
             label: 'Show Graph',
             labelStyle: TextStyle(fontSize: 18.0),
             onTap: () => _showGraph(context),
           ),
           SpeedDialChild(
-            child: Image.asset(
-              'images/current_value.png',
-              color: Colors.white,
-            ),
+            child: Icon(CupertinoIcons.graph_square),
             backgroundColor: Colors.blue,
             label: 'Get Current Values',
             labelStyle: TextStyle(fontSize: 18.0),
@@ -814,64 +539,4 @@ class TodaysData {
 }
 
 
-Future<TodaysData> getTodaysData() async {
-  FarmData todaysFarmData = await getTodaysFarmData();
 
-
-  double sumSoilTemperature = 0.0;
-  for (SoilTemperature m in todaysFarmData.arrSoilTemperature) {
-    sumSoilTemperature += m.data;
-  }
-  double avgSoilTemperature = sumSoilTemperature / todaysFarmData.arrSoilTemperature.length;
-
-  double sumSoilMoisture1 = 0.0;
-  for (SoilMoisture1 m in todaysFarmData.arrSoilMoisture1) {
-    sumSoilMoisture1 += m.data;
-  }
-  double avgSoilMoisture1 = sumSoilMoisture1 / todaysFarmData.arrSoilMoisture1.length;
-
-
-  double sumSoilMoisture2 = 0.0;
-  for (SoilMoisture2 m in todaysFarmData.arrSoilMoisture2) {
-    sumSoilMoisture2 += m.data;
-  }
-  double avgSoilMoisture2 = sumSoilMoisture2 / todaysFarmData.arrSoilMoisture2.length;
-
-
-  double sumAirTemperature = 0.0;
-  for (AirTemperature m in todaysFarmData.arrAirTemperature) {
-    sumAirTemperature += m.data;
-  }
-  double avgAirTemperature = sumAirTemperature / todaysFarmData.arrAirTemperature.length;
-
-
-  double sumAirHumidity = 0.0;
-  for (AirHumidity m in todaysFarmData.arrAirHumidity) {
-    sumAirHumidity += m.data;
-  }
-  double avgAirHumidity = sumAirHumidity / todaysFarmData.arrAirHumidity.length;
-
-
-  double sumLeafWetness = 0.0;
-  for (LeafWetness m in todaysFarmData.arrLeafWetness) {
-    sumLeafWetness += m.data;
-  }
-  double avgLeafWetness = sumLeafWetness / todaysFarmData.arrLeafWetness.length;
-
-
-  double sumLightIntensity = 0.0;
-  for (LightIntensity m in todaysFarmData.arrLightIntensity) {
-    sumLightIntensity += m.data;
-  }
-  double avgLightIntensity = sumLightIntensity / todaysFarmData.arrLightIntensity.length;
-
-  return TodaysData(
-    avgSoilTemperature: avgSoilTemperature,
-    avgSoilMoisture1: avgSoilMoisture1,
-    avgSoilMoisture2: avgSoilMoisture2,
-    avgAirHumidity: avgAirHumidity,
-    avgAirTemperature: avgAirTemperature,
-    avgAirLeafWetness: avgLeafWetness,
-    avgLightIntensity: avgLightIntensity
-  );
-}

@@ -1,16 +1,14 @@
 import 'package:farm_monitoring_flutter/api/get_data.dart';
 import 'package:farm_monitoring_flutter/home_screen.dart';
+import 'package:farm_monitoring_flutter/screens/GraphScreen/GraphScreen.dart';
 import 'package:farm_monitoring_flutter/screens/bottom_nav_screen.dart';
 import 'package:farm_monitoring_flutter/screens/login.dart';
 import 'package:farm_monitoring_flutter/screens/sign_up.dart';
-import 'package:farm_monitoring_flutter/screens/speedometer_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-
-
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,8 +16,6 @@ void main() async{
   runApp(MyApp());
 
 }
-
-
 
 class MyApp extends StatelessWidget {
   final _auth = FirebaseAuth.instance;
@@ -37,7 +33,7 @@ class MyApp extends StatelessWidget {
           SignUp.id: (context) => SignUp(),
           Login.id: (context) => Login(),
           BottomNavigationScreen.id:(context)=>BottomNavigationScreen(),
-          SpeedometerScreen.id: (context)=> SpeedometerScreen(),
+          GraphScreen.id: (context)=> GraphScreen(),
         },
     );
   }
