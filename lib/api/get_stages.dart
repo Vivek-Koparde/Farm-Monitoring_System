@@ -1,4 +1,5 @@
- import 'package:farm_monitoring_flutter/models/Stage.dart';
+ import 'package:farm_monitoring_flutter/api/get_farm.dart';
+import 'package:farm_monitoring_flutter/models/Stage.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -9,9 +10,10 @@ String uid = _auth.currentUser.uid;
 String baseURL = 'https://infinite-fjord-59639.herokuapp.com/stage/';
 
 Future<List<Stage>> getStage() async{
-
+  String selectedFarmId = await getSelectedFarmId();
+  print("FARM ID : "+selectedFarmId);
   List<Stage> arr = [];
-  http.Response response = await http.get(baseURL+uid);
+  http.Response response = await http.get(baseURL+uid+"/"+selectedFarmId);
   if (response.statusCode == 200){
     var data = jsonDecode(response.body);
     //print(data);
@@ -29,10 +31,12 @@ Future<List<Stage>> getStage() async{
 }
 
 Future<bool> updateStageDate(String taskNo,DateTime date) async{
+  String selectedFarmId = await getSelectedFarmId();
+
   String json = '{"date": "'+date.toString()+'"}';
   Map<String, String> headers = {"Content-type": "application/json"};
   http.Response response = await http.patch(
-      baseURL+uid+"/"+taskNo,
+      baseURL+uid+"/"+selectedFarmId+"/"+taskNo,
       headers: headers,
       body: json);
   print(response.body);

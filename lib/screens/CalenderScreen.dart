@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:farm_monitoring_flutter/api/get_farm.dart';
 import 'package:farm_monitoring_flutter/api/get_tasks.dart';
 import 'package:farm_monitoring_flutter/models/Task.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -421,7 +422,8 @@ class _CalenderState extends State<Calender> {
 
   Future<bool> addTask(
       String activity, String description, DateTime date) async {
-    String url = 'https://infinite-fjord-59639.herokuapp.com/tasks/'+FirebaseAuth.instance.currentUser.uid;
+    String selectedFarmId = await getSelectedFarmId();
+    String url = 'https://infinite-fjord-59639.herokuapp.com/tasks/'+FirebaseAuth.instance.currentUser.uid+"/"+selectedFarmId;
     Map<String, String> headers = {"Content-type": "application/json"};
 
     Response response = await post(url,

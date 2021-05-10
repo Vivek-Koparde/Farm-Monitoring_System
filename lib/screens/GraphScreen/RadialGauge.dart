@@ -62,6 +62,7 @@ class _RadialGaugeState extends State<RadialGauge> {
                             height: 80.0,
                           ),
                           Text(
+
                               snapshot.toString().substring(0,4),
                               style: TextStyle(
                                   fontSize: 25,

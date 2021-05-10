@@ -4,7 +4,8 @@ import 'package:farm_monitoring_flutter/api/get_data.dart';
 import 'package:farm_monitoring_flutter/screens/AnalyticsScreen.dart';
 import 'package:farm_monitoring_flutter/screens/CalenderScreen.dart';
 import 'package:farm_monitoring_flutter/screens/DiseaseScreen.dart';
-import 'file:///C:/Users/Vivek/AndroidStudioProjects/farm-monitoring-flutter/lib/screens/GraphScreen/GraphScreen.dart';
+
+import 'package:farm_monitoring_flutter/screens/GraphScreen/GraphScreen.dart';
 import 'package:farm_monitoring_flutter/screens/ProfileScreen.dart';
 
 import 'package:flutter/material.dart';

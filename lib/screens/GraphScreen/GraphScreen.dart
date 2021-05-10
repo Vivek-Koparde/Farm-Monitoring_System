@@ -4,7 +4,9 @@ import 'package:farm_monitoring_flutter/api/get_temperature.dart';
 import 'package:farm_monitoring_flutter/api/get_moisture.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:farm_monitoring_flutter/models/FarmData.dart';
-import 'file:///C:/Users/Vivek/AndroidStudioProjects/farm-monitoring-flutter/lib/screens/GraphScreen/SpeedoMeterScreen.dart';
+import 'package:farm_monitoring_flutter/screens/GraphScreen/GraphScreen.dart';
+import 'package:farm_monitoring_flutter/screens/GraphScreen/SpeedoMeterScreen.dart';
+
 import 'package:farm_monitoring_flutter/widgets/CustomeTimeGraph.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:lottie/lottie.dart';
