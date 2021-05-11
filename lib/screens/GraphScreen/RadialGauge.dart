@@ -61,12 +61,26 @@ class _RadialGaugeState extends State<RadialGauge> {
                           SizedBox(
                             height: 80.0,
                           ),
-                          Text(
 
+                          (
+                          snapshot.toString()!='NaN'?
+                          Text(
                               snapshot.toString().substring(0,4),
                               style: TextStyle(
                                   fontSize: 25,
-                                  color: Colors.white)),
+                                  color: Colors.white)):
+                          Text(
+                              '0.0',
+                              style: TextStyle(
+                                  fontSize: 25,
+                                  color: Colors.white))
+                          ),
+
+                          // Text(
+                          //     snapshot.toString(),
+                          //     style: TextStyle(
+                          //         fontSize: 25,
+                          //         color: Colors.white)),
                           SizedBox(height: 10),
                           Text(name,
                               style: TextStyle(

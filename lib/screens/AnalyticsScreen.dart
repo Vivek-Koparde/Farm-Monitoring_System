@@ -309,7 +309,6 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
               //     scaffoldColor: Colors.white,
               // ),
               FutureBuilder(
-
                 future: getStageData(),
                 builder: (BuildContext context,AsyncSnapshot snapshot){
                   if(snapshot.data==null){

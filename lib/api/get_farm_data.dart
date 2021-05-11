@@ -105,8 +105,8 @@ Future<FarmData> getTodaysFarmData () async{
     String uid =  _auth.currentUser.uid;
     String baseURL = 'https://infinite-fjord-59639.herokuapp.com/farmDataNew/';
     DateTime today = DateTime.parse("2021-03-02T17:30:00.000+00:00");
-
-    http.Response response = await http.get(baseURL+uid+"/6097f5380761600f38ba92df/"+today.toString());
+    String selectedFarmId = await getSelectedFarmId();
+    http.Response response = await http.get(baseURL+uid+"/"+selectedFarmId+"/"+today.toString());
 
     if (response.statusCode == 200) {
       var data = response.body;

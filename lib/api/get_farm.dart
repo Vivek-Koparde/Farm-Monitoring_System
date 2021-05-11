@@ -26,6 +26,8 @@ Future<List<Farm>> getFarm() async{
 
   List<Farm> arr = [];
   http.Response response = await http.get(baseURL+uid);
+  print("RESPOnSE : ");
+  print(response);
   if (response.statusCode == 200){
     var data = jsonDecode(response.body);
     //print(data);
@@ -57,18 +59,29 @@ Future<Farm> getFirstFarm() async{
   if (response.statusCode == 200){
     var data = jsonDecode(response.body);
 
-    // String id = data['_id'].toString();
-    // bool isSelected = data['isSelected'];
-    // String farmName = data['farmName'].toString();
-    // double longitude = double.parse(data['longitude'].toString());
-    // double latitude = double.parse(data['latitude'].toString());
-    // double area = double.parse(data['area'].toString());
-    // DateTime date = DateTime.parse(data['date'].toString());
-    // Farm farm = new Farm(id: id,isSelected: isSelected,farmName: farmName,longitude: longitude,latitude: latitude,area: area,date: date);
     print("FETCHED DATA : ");
     print(response.body);
     return null;
   }
   return null;
 }
+
+Future<bool> changeFarmSelectedStatus(String farmId,String isSelected) async{
+  final _auth = FirebaseAuth.instance;
+  String uid = _auth.currentUser.uid;
+  print(uid);
+  print(farmId);
+  String baseURL = 'https://infinite-fjord-59639.herokuapp.com/farm/'+uid+'/'+farmId+'/'+isSelected;
+//String baseURL = 'https://infinite-fjord-59639.herokuapp.com/farm/4fwUKAVKEPhRJl64VRyHvniX0oh1/6097f5380761600f38ba92df/false';
+  //String json = '{"isSelected": "'+isSelected+'"}';
+  Map<String, String> headers = {"Content-type": "application/json"};
+  http.Response response = await http.put(
+      baseURL,
+    headers: headers
+     );
+
+  print(response.body);
+  return true;
+}
+
 
