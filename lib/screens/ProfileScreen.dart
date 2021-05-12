@@ -51,10 +51,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           FlatButton(
                             color: Colors.green,
                             onPressed: () async{
-                              // _auth.signOut();
-                              //   Navigator.popAndPushNamed(context, Login.id);
-                              //TODO: change to normal
-                              await getFirstFarm();
+                              _auth.signOut();
+                                Navigator.popAndPushNamed(context, Login.id);
+                              // TODO: change to normal
+                              // await getFirstFarm();
                             },
                             child:Text('Logout'),
                           )
