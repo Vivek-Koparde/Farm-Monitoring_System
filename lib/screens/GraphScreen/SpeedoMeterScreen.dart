@@ -36,29 +36,41 @@ class _SpeedoMeterState extends State<SpeedoMeter> {
                   padding: const EdgeInsets.all(15.0),
                   child: Column(
                     children: [
-                      RadialGauge(
-                          snapshot: snapshot.data.avgSoilTemperature,
-                          name: 'Soil Temperature'),
+                      Row(
+                        children: [
+                          RadialGauge(
+                              snapshot: snapshot.data.avgSoilTemperature,
+                              name: 'Soil Temperature'),
+                          SizedBox(width: 10.0),
+                          RadialGauge(
+                              snapshot: snapshot.data.avgSoilMoisture1,
+                              name: 'Soil Moisture 1'),
+                        ],
+                      ),
                       SizedBox(height: 20.0),
-                      RadialGauge(
-                          snapshot: snapshot.data.avgSoilMoisture1,
-                          name: 'Soil Moisture 1'),
+                      Row(
+                        children: [
+                          RadialGauge(
+                              snapshot: snapshot.data.avgSoilMoisture2,
+                              name: 'Soil Moisture 2'),
+                          SizedBox(width: 10.0),
+                          RadialGauge(
+                              snapshot: snapshot.data.avgAirHumidity,
+                              name: 'Air Humidity'),
+                        ],
+                      ),
                       SizedBox(height: 20.0),
-                      RadialGauge(
-                          snapshot: snapshot.data.avgSoilMoisture2,
-                          name: 'Soil Moisture 2'),
-                      SizedBox(height: 20.0),
-                      RadialGauge(
-                          snapshot: snapshot.data.avgAirHumidity,
-                          name: 'Air Humidity'),
-                      SizedBox(height: 20.0),
-                      RadialGauge(
-                          snapshot: snapshot.data.avgAirTemperature,
-                          name: 'Air Temperature'),
-                      SizedBox(height: 20.0),
-                      RadialGauge(
-                          snapshot: snapshot.data.avgAirLeafWetness,
-                          name: 'Air Leaf Wetness'),
+                      Row(
+                        children: [
+                          RadialGauge(
+                              snapshot: snapshot.data.avgAirTemperature,
+                              name: 'Air Temperature'),
+                          SizedBox(width: 10.0),
+                          RadialGauge(
+                              snapshot: snapshot.data.avgAirLeafWetness,
+                              name: 'Air Leaf Wetness'),
+                        ],
+                      ),
                       SizedBox(height: 20.0),
                       RadialGauge(
                           snapshot: snapshot.data.avgLightIntensity,

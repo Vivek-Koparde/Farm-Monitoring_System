@@ -24,6 +24,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomPadding: false,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Container(
@@ -47,7 +48,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               fontSize: 20,
                             ),
                           ),
-                          SizedBox(height: 20,),
+                          SizedBox(height: 10,),
                           FlatButton(
                             color: Colors.green,
                             onPressed: () async{
