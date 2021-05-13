@@ -114,28 +114,7 @@ class _LoginState extends State<Login> {
                     ),
                   ),
                   SizedBox(height: 20,),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        'Not Registered ?  ',
-                        style: TextStyle(color: Color(0xff5caa8b)),
-                      ),
-                      GestureDetector(
-                        onTap: (){
-                          Navigator.pushNamed(context, SignUp.id);
-                        },
-                        child: Text(
-                          'Register here ',
-                          style: TextStyle(
-                              color: Colors.lightBlue,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 15
-                          ),
-                        ),
-                      ),
-                    ],
-                  )
+
                 ],
               ),
             ),

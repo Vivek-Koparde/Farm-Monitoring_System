@@ -80,7 +80,7 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
               width: 25,
               height: 25,
             ),
-            title: Text("Calender"),
+            title: Text("Calendar"),
             activeColor: Colors.green,
             inactiveColor: Colors.black,
           ),

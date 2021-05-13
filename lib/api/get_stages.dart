@@ -5,12 +5,14 @@ import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
 
 
-final _auth = FirebaseAuth.instance;
-String uid = _auth.currentUser.uid;
-String baseURL = 'https://infinite-fjord-59639.herokuapp.com/stage/';
 
 Future<List<Stage>> getStage() async{
+  final _auth = FirebaseAuth.instance;
+  String uid = _auth.currentUser.uid;
+  String baseURL = 'https://infinite-fjord-59639.herokuapp.com/stage/';
+
   String selectedFarmId = await getSelectedFarmId();
+  print("UID : "+uid);
   print("FARM ID : "+selectedFarmId);
   List<Stage> arr = [];
   http.Response response = await http.get(baseURL+uid+"/"+selectedFarmId);
@@ -31,6 +33,9 @@ Future<List<Stage>> getStage() async{
 }
 
 Future<bool> updateStageDate(String taskNo,DateTime date) async{
+  final _auth = FirebaseAuth.instance;
+  String uid = _auth.currentUser.uid;
+  String baseURL = 'https://infinite-fjord-59639.herokuapp.com/stage/';
   String selectedFarmId = await getSelectedFarmId();
 
   String json = '{"date": "'+date.toString()+'"}';

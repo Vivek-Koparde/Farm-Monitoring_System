@@ -1,24 +1,26 @@
+import 'package:farm_monitoring_flutter/api/get_prediction.dart';
+import 'package:farm_monitoring_flutter/models/Prediction.dart';
 import 'package:flutter/material.dart';
 
 class DiseaseScreen extends StatelessWidget {
 
   final List<String> img = <String>[
-    'https://cdn.britannica.com/s:690x388,c:crop/63/118663-050-FF34ACCE/Powdery-mildew-grapes.jpg',
     'https://static.vikaspedia.in/media/images_en/agriculture/crop-production/integrated-pest-managment/ipm-for-fruit-crops/ipm-strategies-for-grapes/Downymildew.jpg',
-    'https://www.almanac.com/sites/default/files/styles/primary_image_in_article/public/image_nodes/anthracnose2-csiro_scienceimage-wikimedia_commons.jpg?itok=N_hv8JV2',
-    'https://upload.wikimedia.org/wikipedia/commons/2/28/Guignardia_bidwellii_04.jpg',
+    'https://www.goodfruit.com/wp-content/uploads/Black-rot-lesions-on-leaves-indicate-potential-for-fruit-infection-1-feat2.jpg',
+    'https://www.plantsbycreekside.com/wp-content/uploads/2016/06/Powdery-Mildew-on-Cucumber-Leaf.jpg',
+    'https://s3-us-west-2.amazonaws.com/agfuse-web/production/article_feature_images/3c09f8c03e9a45a4f763468994ec673e.jpg',
   ];
   final List<String> name = <String>[
-    "Powedery mildew",
     "Downy mildew",
-    "Anthracnose",
-    "Black rot",
+    "Karpa",
+    "Bhuri",
+    "Xanthomonas",
   ];
   final List<String> info = <String>[
-    "Powdery mildew, plant disease of worldwide occurrence that causes a powdery growth on the surface of leaves, buds, young shoots, fruits, and flowers. Powdery mildew is caused by many specialized races of fungal species in the genera Erysiphe, Microsphaera, Phyllactinia, Podosphaera, Sphaerotheca, and Uncinula. Hundreds of species of trees, shrubs, vines, flowers, vegetables, fruits, grasses, field crops, and weeds can be affected by powdery mildew ",
     "The fungus is an obligate pathogen which can attack all green parts of the vine.Symptoms of this disease are frequently confused with those of powdery mildew. Infected leaves develop pale yellow-green lesions which gradually turn brown. Severely infected leaves often drop prematurely.Infected petioles, tendrils, and shoots often curl, develop a shepherd's crook, and eventually turn brown and die.Young berries are highly susceptible to infection and are often covered with white fruiting structures of the fungus. Infected older berries of white cultivars may turn dull gray-green, whereas those of black cultivars turn pinkish red.",
-    "Anthracnose is a fungal disease that tends to attack plants in the spring when the weather is cool and wet, primarily on leaves and twigs. The fungi overwinter in dead twigs and fallen leaves. Cool, rainy weather creates perfect conditions for the spores to spread.",
-    "The disease attacks the leaves, stem, flowers and berries. All the new growth on the vineis prone to attack during the growing season.The symptoms are in the form of irregularly shapedreddish brown spots on the leaves and a black scab on berries.Occasionally, small elliptical darkcoloured canker lesions occur on the young stems and tendrils. Leaf, cane and tendril infection canoccur only when the tissue is young, but berries can be infected until almost fully-grown if an activefungicide residue is not present.The affected berries shrivel and become hard black mummies.",
+    "The disease manifests itself on vine, stems and young shoots. The young blossom when affected show blighting effects but if the attack is in advanced gap on berries, peculiar symptom called bird eye spot is observed. The disease occurs from June to November. It can be controlled by spraying bordeaux mixture 5:5:50 or any other copper compound containing 50 per cent metallic copper in the third week of the months of May, July, August, October, November and December at a minimum interval of at least 15 to 21 days.",
+    "Whitish patches appear on both sides of the leaves. The patches also appear on sheets near base, which turn black. In severe case withering and shedding of leaves takes place. The affected blossoms fail to set in fruits. Young berries may drop when affected in early stages and in advanced stage berries crack. The disease usually prevails during the period from November to January and causes damage to about 20 to 25 per cent. It can be controlled by dusting sulphur (200-300 mesh) in the third week of the months of November, December and January.",
+    "The disease is more prevalent during June-August and again in February-March. Temperature range of 25-30 C and relative humidity of 80-90% is favourable for the development of the disease. The young growing shoots are affected first. Disease infects leaves, shoots and berries. The symptoms appear as minute water soaked spots on the lower surface of the leaves along the main and lateralveins. Later on these spots coalesce and form larger patches. Brownish black lesions are formed on the berries, which later become small and shriveled."
   ];
 
 
@@ -28,71 +30,83 @@ class DiseaseScreen extends StatelessWidget {
     return Scaffold(
       body: SafeArea(
         child: Container(
-          child: Center(
-            child: ListView.builder(
-                itemCount: name.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return Container(
-                    padding: EdgeInsets.only(top: 10, left: 10, right: 10),
-                    width: double.infinity,
-                    child: Card(
-                      color: Color(0xff00A961),
-                      child: Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Image.network(
-                              img[index],
-                              height: 200,
-                              width: 300,
-                              fit: BoxFit.cover,
-                            ),
-                            //SizedBox(height: 10.0,child: Container(color: Colors.white,),),
-                            Container(
-                              padding: EdgeInsets.all(20),
+          child: FutureBuilder(
+            future: getPrediction(),
+            builder: (BuildContext context,AsyncSnapshot snapshot){
+              if (snapshot.data==null){
+                return Center(child: Text("Loading..."));
+              }
+              else{
+                List<String> predictions=[];
+
+                predictions.add(snapshot.data.downy);
+                predictions.add(snapshot.data.karpa);
+                predictions.add(snapshot.data.bhuri);
+                predictions.add(snapshot.data.xanthomonas);
+                return Center(
+                  child: ListView.builder(
+                      itemCount: name.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return Container(
+                          padding: EdgeInsets.only(top: 10, left: 10, right: 10),
+                          width: double.infinity,
+                          child: Card(
+                            color: Color(0xff00A961),
+                            child: Padding(
+                              padding: const EdgeInsets.all(10.0),
                               child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  Text(
-                                    name[index],
-                                    style: TextStyle(
-                                      fontSize: 20,
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
+                                  Image.network(
+                                    img[index],
+                                    height: 200,
+                                    width: 300,
+                                    fit: BoxFit.cover,
+                                  ),
+                                  //SizedBox(height: 10.0,child: Container(color: Colors.white,),),
+                                  Container(
+                                    padding: EdgeInsets.all(20),
+                                    child: Column(
+                                      children: [
+                                        Text(
+                                          name[index],
+                                          style: TextStyle(
+                                            fontSize: 20,
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        Text(info[index],style: TextStyle(color: Colors.white),),
+                                      ],
                                     ),
                                   ),
-                                  Text(info[index],style: TextStyle(color: Colors.white),),
+                                  Container(
+                                    padding: EdgeInsets.only(left: 20.0,top: 10.0,bottom: 10.0),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text('Probability',style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold)),
+                                        Row(
+                                          children: [
+                                            Image.asset('images/temperature-high.png',color: Colors.white,width: 20.0,height: 20.0,),
+                                            Text(predictions[index].toUpperCase(),style: TextStyle(fontSize: 20,color: Colors.white,fontWeight: FontWeight.bold),),
+
+                                          ],),
+
+                                      ],
+                                    ),
+                                  )
                                 ],
                               ),
                             ),
-                            Container(
-                              padding: EdgeInsets.only(left: 20.0,top: 10.0,bottom: 10.0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text('Probablity',style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold)),
-                                  Row(
-                                    children: [
-                                      Image.asset('images/temperature-high.png',color: Colors.white,width: 20.0,height: 20.0,),
-                                      Text('High :',style: TextStyle(color: Colors.white),),
+                          ),
+                        );
+                      }),
+                );
+              }
+            },
+          )
 
-                                  ],),
-                                  Row(
-                                    children: [
-                                      Image.asset('images/temperature-low.png',color: Colors.white,width: 20.0,height: 20.0,),
-                                      Text('Low :',style: TextStyle(color: Colors.white),),
-
-                                    ],),
-                                ],
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                  );
-                }),
-          ),
         ),
       ),
     );

@@ -24,15 +24,15 @@ class _GraphScreenState extends State<GraphScreen> {
   double moistureSpeedoMeterValue = 150.0;
   double temperatureSpeedoMeterValue;
   double lighIntensitySpeedoMeterValue;
-  var timeMoisture = 1;
-  var timeTemperature = 1;
-  var timeLightIntensity = 1;
-  var timeSoilTemperature = 1;
-  var timeSoilMoisture1 = 1;
-  var timeSoilMoisture2 = 1;
-  var timeAirTemperature = 1;
-  var timeAirHumidity = 1;
-  var timeLeafWetness =1;
+  var timeMoisture = 5;
+  var timeTemperature = 5;
+  var timeLightIntensity = 5;
+  var timeSoilTemperature = 5;
+  var timeSoilMoisture1 = 5;
+  var timeSoilMoisture2 = 5;
+  var timeAirTemperature = 5;
+  var timeAirHumidity = 5;
+  var timeLeafWetness =5;
 
   @override
   Widget build(BuildContext context) {
@@ -369,7 +369,7 @@ class _GraphScreenState extends State<GraphScreen> {
                               ),
                               CustomTimeGraph(
                                 title: "Soil Moisture 2",
-                                changeTime: changeSoilMoisture1,
+                                changeTime: changeSoilMoisture2,
                                 time: timeSoilMoisture2,
                                 createSampleData: _createSoilMoisture2Data,
                               ),
